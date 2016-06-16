@@ -7,22 +7,26 @@ open System.IO
 open FSharp.Charting
 
 type CrimeReport = CsvProvider<"sample.csv", AssumeMissingValues  = true>
-type CrimeReport.Row with
-    member this.Place = ""
-type Crime = CrimeReport.Row
+type CrimeReportRow = CrimeReport.Row
+type Crime = {Place : string; Type : string; Outcome : string}
 
 let path = __SOURCE_DIRECTORY__ + @"..\..\Data\CrimeEngland\"
+
+let mapToCrime(cr : CrimeReportRow seq) = 
+    cr
+    |> Seq.map(fun(row : CrimeReportRow) -> {Place = row.``Reported by``; Outcome = row.``Last outcome category``; Type = row.``Crime type`` })
 
 let data = 
     Directory.EnumerateDirectories path 
     |> Seq.map Directory.EnumerateFiles
     |> Seq.concat
-    |> Seq.map(fun filename -> (CrimeReport.Load filename).Rows)
-    |> Seq.concat    
-    |> Seq.toList
+    |> Seq.map(fun filename -> (CrimeReport.Load filename).Rows)   
+    |> Seq.map(fun rows -> mapToCrime rows)
+    |> Seq.concat
+    |> Seq.toList   
 
 let overall = data.Length
-let hasOutcome = data |> List.filter(fun (cr : Crime) -> cr.``Last outcome category``.Length > 0 && cr.``Last outcome category`` <> "Under investigation")
+let hasOutcome = data |> List.filter(fun (cr : Crime) -> cr.Outcome.Length > 0 && cr.Outcome <> "Under investigation")
 let outcomePercent = 100.0*(float)hasOutcome.Length/(float)overall
 
 let groupData featureExtractor = 
@@ -31,9 +35,10 @@ let groupData featureExtractor =
     |> Seq.map (fun (label, group) -> label, group |> Seq.length)
     |> Seq.toList
 
-let extractOutcome(cr:Crime) = cr.``Last outcome category``
-let extractCrimeType(cr:Crime) = cr.``Crime type``
-let suspectFoud(cr:Crime) = cr.``Last outcome category`` <> "Investigation complete; no suspect identified"
+let extractOutcome(cr:Crime) = cr.Outcome
+let extractCrimeType(cr:Crime) = cr.Type
+let extractPlace(cr:Crime) = cr.Place
+let suspectFoud(cr:Crime) = cr.Outcome <> "Investigation complete; no suspect identified"
 
-let chancesToSolve = hasOutcome|> Seq.averageBy(fun (cr : Crime) -> if cr.``Last outcome category`` = "Investigation complete; no suspect identified" then 0.0 else 1.0)   
-groupData extractOutcome |> Chart.Pie
+let chancesToSolve = hasOutcome|> Seq.averageBy(fun (cr : Crime) -> if cr.Outcome = "Investigation complete; no suspect identified" then 0.0 else 1.0)   
+groupData extractPlace |> Chart.Pie
