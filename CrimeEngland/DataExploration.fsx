@@ -171,3 +171,5 @@ let accuracy tree (sample : Crime seq) =
 let manualTree = growTree filters hasOutcome suspectFoud (features |> Map.ofList)
 
 let manualTreeAccuracy = hasOutcome |> accuracy manualTree
+
+
