@@ -5,6 +5,7 @@
 #r @"Accord.MachineLearning.3.0.2\lib\net45\Accord.MachineLearning.dll"
 #r @"Accord.Statistics.3.0.2\lib\net45\Accord.Statistics.dll"
 #r @"Accord.Math.3.0.2\lib\net45\Accord.Math.dll"
+#load "Tree.fs"
 
 open FSharp.Data
 open System.IO
@@ -13,6 +14,8 @@ open Accord.MachineLearning.DecisionTrees
 open Accord
 open Accord.Statistics.Filters
 open Accord.Math
+open CrimeEngland.Tree
+
 
 type CrimeReport = CsvProvider<"sample.csv", AssumeMissingValues  = true>
 type CrimeReportRow = CrimeReport.Row
@@ -145,11 +148,26 @@ let encodeOutputs(crimes:Crime seq) =
 
 learning.Run(training|>encodeInputs, training|>encodeOutputs)
 
-let manualError = 
+let manualAccuracy = 
     let inputs = encodeInputs validation
     let outputs = encodeOutputs validation
     Array.zip inputs outputs
-    |> Array.averageBy(fun (i,o) -> if tree.Compute i = o then 0.0 else 1.0)    
+    |> Array.averageBy(fun (i,o) -> if tree.Compute i = o then 1.0 else 0.0)    
 
-let valError = learning.ComputeError(validation|>encodeInputs, validation|>encodeOutputs)
-let trainError = learning.ComputeError(training|>encodeInputs, training|>encodeOutputs)
+let validationAccuracy = 1.0 - learning.ComputeError(validation|>encodeInputs, validation|>encodeOutputs)
+let trainingAccuracy = 1.0 - learning.ComputeError(training|>encodeInputs, training|>encodeOutputs)
+
+let filters = [entropyGainFilter; leafSizeFilter 10]
+let features = [
+    "Place", fun(cr:Crime) -> cr.Place |> Some
+    "Type", fun(cr:Crime) -> cr.Type |> Some
+    ]
+
+let accuracy tree (sample : Crime seq) =
+    sample
+    |> Seq.averageBy(fun p ->
+        if suspectFoud p = decide tree p then 1.0 else 0.0)
+
+let manualTree = growTree filters hasOutcome suspectFoud (features |> Map.ofList)
+
+let manualTreeAccuracy = hasOutcome |> accuracy manualTree
