@@ -22,7 +22,7 @@ angular
             .domain([0, d3.max(salesDataToPlot, function(d) {
               return d.sales;
             })])
-            .range([rawSvg.attr("heigth") - padding, 0]);
+            .range([rawSvg.attr("height") - padding, 0]);
 
           xAxisGen = d3.svg.axis()
             .scale(xScale)
