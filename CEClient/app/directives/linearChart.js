@@ -10,18 +10,18 @@ angular
         var pathClass = "path";
         var xScale, yScale, xAxisGen, yAxisGen, lineFun;
         var d3 = $window.d3;
-        var rawSvg = elem.find("svg")[0];
-        var svg = d3.select(rawSvg);
+        var rawSvg = elem.find("svg");
+        var svg = d3.select(rawSvg[0]);
 
         function setChartParameters(){
           xScale = d3.scale.linear()
             .domain([salesDataToPlot[0].hour, salesDataToPlot[salesDataToPlot.length - 1].hour])
-            .range([padding + 5, rawSvg.clientWidth - padding]);
+            .range([padding + 5, rawSvg.attr('width') - padding]);
           yScale = d3.scale.linear()
             .domain([0, d3.max(salesDataToPlot, function(d){
-              return d.scales;
+              return d.sales;
             })])
-            .range([rawSvg.clientHeight - padding, 0]);
+            .range([rawSvg.attr('heigth') - padding, 0]);
           xAxisGen = d3.svg.axis().scale(xScale).orient('bottom').ticks(salesDataToPlot.length - 1);
           yAxisGen = d3.svg.axis().scale(yScale).orient('left').ticks(5);
           lineFun = d3.svg.line()
