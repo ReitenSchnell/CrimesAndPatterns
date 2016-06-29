@@ -19,7 +19,7 @@ gulp.task('appJS', function() {
     './app/index.config.js',
     './app/index.run.js',
     './app/**/*.js'])
-    .pipe(uglify({ mangle: false }))
+    //.pipe(uglify({ mangle: false }))
     .pipe(concat('app.js'))
     .pipe(gulp.dest('./build'))
 });
@@ -67,7 +67,8 @@ gulp.task('libJS', function() {
     './bower_components/angular-facebook/lib/angular-facebook-phonegap.js',
 
     './bower_components/angular-touch/angular-touch.min.js',
-    './bower_components/moment/min/moment.min.js'
+    './bower_components/moment/min/moment.min.js',
+    './bower_components/d3/d3.min.js'
   ])
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('./build'));
