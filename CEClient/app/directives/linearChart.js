@@ -15,26 +15,26 @@ angular
 
         function setChartParameters(){
           xScale = d3.scale.linear()
-            .domain([salesDataToPlot[0].hour, salesDataToPlot[salesDataToPlot.length - 1].hour])
-            .range([padding + 5, rawSvg.attr('width') - padding]);
+            .domain([salesDataToPlot[0].hour, salesDataToPlot[salesDataToPlot.length-1].hour])
+            .range([padding + 5, rawSvg.attr("width") - padding]);
 
           yScale = d3.scale.linear()
-            .domain([0, d3.max(salesDataToPlot, function(d){
+            .domain([0, d3.max(salesDataToPlot, function(d) {
               return d.sales;
             })])
-            .range([rawSvg.attr('heigth') - padding, 0]);
+            .range([rawSvg.attr("heigth") - padding, 0]);
 
           xAxisGen = d3.svg.axis()
             .scale(xScale)
-            .orient('bottom')
+            .orient("bottom")
             .ticks(salesDataToPlot.length - 1);
 
           yAxisGen = d3.svg.axis()
             .scale(yScale)
-            .orient('left')
+            .orient("left")
             .ticks(5);
 
-          
+
           lineFun = d3.svg.line()
             .x(function (d) {
               return xScale(d.hour);
