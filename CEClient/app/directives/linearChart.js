@@ -15,6 +15,7 @@ angular
         var svg = d3.select(rawSvg[0]);
 
         function setChartParameters(){
+
           xScale = d3.scale.linear()
             .domain([salesDataToPlot[0].hour, salesDataToPlot[salesDataToPlot.length-1].hour])
             .range([padding + 5, rawSvg.attr("width") - padding]);
@@ -47,8 +48,6 @@ angular
         }
 
         function drawLineChart(){
-          if (!salesDataToPlot.length)
-            return;
           setChartParameters();
           svg.append('svg:g')
             .attr('class', 'x axis')
@@ -68,11 +67,14 @@ angular
             });
         }
 
-        drawLineChart();
+        //drawLineChart();
 
         scope.$watchCollection(exp, function(newVal, oldVal){
-          salesDataToPlot = newVal;
-          redrawLineChart();
+          if (newVal.length > 0){
+            salesDataToPlot = newVal;
+            //redrawLineChart();
+            drawLineChart();
+          }
         });
 
         function redrawLineChart(){
