@@ -1,11 +1,12 @@
 angular
   .module('crimeChartApp')
-  .directive('linearChart', function ($window) {
+  .directive('linearChart', function ($window, $parse) {
     return{
       restrict: 'EA',
       template: "<svg width='850' height='200'></svg>",
       link: function(scope, elem, attrs){
-        var salesDataToPlot = scope[attrs.chartData];
+        var exp = $parse(attrs.chartData);
+        var salesDataToPlot = exp(scope);
         var padding = 20;
         var pathClass = "path";
         var xScale, yScale, xAxisGen, yAxisGen, lineFun;
@@ -46,6 +47,8 @@ angular
         }
 
         function drawLineChart(){
+          if (!salesDataToPlot.length)
+            return;
           setChartParameters();
           svg.append('svg:g')
             .attr('class', 'x axis')
@@ -66,6 +69,18 @@ angular
         }
 
         drawLineChart();
+
+        scope.$watchCollection(exp, function(newVal, oldVal){
+          salesDataToPlot = newVal;
+          redrawLineChart();
+        });
+
+        function redrawLineChart(){
+          setChartParameters();
+          svg.selectAll("g.y.axis").call(yAxisGen);
+          svg.selectAll("g.x.axis").call(xAxisGen);
+          svg.selectAll("." + pathClass).attr({d:lineFun(salesDataToPlot)})
+        }
       }
     };
   });

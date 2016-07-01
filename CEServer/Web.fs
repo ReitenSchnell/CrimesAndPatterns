@@ -13,6 +13,8 @@ module Web =
         JsonConvert.SerializeObject(v, settings)
         |> OK 
         >=> Writers.setMimeType "application/json; charset=utf-8"
+        >=> Writers.setHeader "Access-Control-Allow-Origin" "*"
+        >=> Writers.setHeader "Access-Control-Allow-Headers" "content-type"
 
     
 
