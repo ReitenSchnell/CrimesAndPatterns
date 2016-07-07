@@ -8,6 +8,7 @@ module Data =
     type CrimeReport = CsvProvider<"sample.csv", AssumeMissingValues  = true>
     type CrimeReportRow = CrimeReport.Row
     type Crime = {Place : string; Type : string; Outcome : string}
+    type Statistics = {Label : string; Value : float}    
 
     let pathToData = __SOURCE_DIRECTORY__ + @"..\..\Data\CrimeEngland1\"
 
@@ -52,10 +53,12 @@ module Data =
         crimes                
         |> Seq.countBy extractPlace
         |> Seq.toList
+        |> Seq.map (fun (l,v) -> {Label = l; Value = float v})
 
     let crimesByType (crimes:Crime seq) =
         crimes                
         |> Seq.countBy extractType
         |> Seq.toList
+        |> Seq.map (fun (l,v) -> {Label = l; Value = float v})
 
 
