@@ -17,11 +17,11 @@ angular
           var h = 450;
           var r = Math.min(w, h)/2;
 
-          var color = d3.scale.category20();
+          var color = d3.scale.category20c();
           var vis = svg.data([dataToPlot])
             .attr("width", w)
             .attr("height", h)
-            .append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
+            .append("svg:g").attr("transform", "translate(" + w/2 + "," + h/2 + ")");
 
           var slices = vis.append("svg:g").attr("class", "slices");
           var labels = vis.append("svg:g").attr("class", "labels");
@@ -59,20 +59,6 @@ angular
             .attr("style","cursor:pointer;")
             .append("svg:title")
             .text(function(d, i) { return dataToPlot[i].label + ': '+ dataToPlot[i].value; });
-
-          //arcs.append("svg:text")
-          //  .attr("transform", function(d){
-          //    d.innerRadius = 0;
-          //    d.outerRadius = r;
-          //    return "translate(" + arc.centroid(d) + ")";})
-          //  .attr("text-anchor", "middle")
-          //  .text( function(d, i) {
-          //      return dataToPlot[i].label;
-          //    }
-          //  )
-          //  .attr("style","cursor:pointer;")
-          //  .attr("fill","#fff")
-          //  .classed("slice-label",true);
 
           var key = function(d,i){ return dataToPlot[i].label; };
 
@@ -123,7 +109,11 @@ angular
             .data(pie(dataToPlot), key);
 
           polyline.enter()
-            .append("polyline").style("opacity",.3).style("stroke", "black").style("stroke-width", "2px").style("fill", "none");
+            .append("polyline")
+            .style("opacity",.3)
+            .style("stroke", "black")
+            .style("stroke-width", "2px")
+            .style("fill", "none");
 
           polyline.transition().duration(1000)
             .attrTween("points", function(d){
