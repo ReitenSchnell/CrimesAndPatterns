@@ -27,20 +27,43 @@ angular
           var arc = d3.svg.arc().outerRadius(r);
 
           var arcs = vis.selectAll("g.slice").data(pie).enter().append("svg:g").attr("class", "slice");
+
           arcs.append("svg:path")
             .attr("fill", function(d, i){
               return color(i);
             })
+            .attr("stroke", "#fff")
+            .attr("stroke-width", "1")
             .attr("d", function (d) {
               return arc(d);
-            });
+            })
+            .on("mouseover", function(e){
+              $(this)
+                .attr("fill-opacity", ".5")
+                .css({"stroke": "green", "stroke-width": "1px"});
+            })
+            .on("mouseout",function(e){
+              $(this)
+                .attr("fill-opacity", "1")
+                .css({"stroke-width": "0px"});
+            })
+            .attr("style","cursor:pointer;")
+            .append("svg:title")
+            .text(function(d, i) { return dataToPlot[i].label + ': '+ dataToPlot[i].value; });
 
-          arcs.append("svg:text").attr("transform", function(d){
-            d.innerRadius = 0;
-            d.outerRadius = r;
-            return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
-              return dataToPlot[i].label;}
-          );
+          arcs.append("svg:text")
+            .attr("transform", function(d){
+              d.innerRadius = 0;
+              d.outerRadius = r;
+              return "translate(" + arc.centroid(d) + ")";})
+            .attr("text-anchor", "middle")
+            .text( function(d, i) {
+                return dataToPlot[i].label;
+              }
+            )
+            .attr("style","cursor:pointer;")
+            .attr("fill","#fff")
+            .classed("slice-label",true);
         }
 
         scope.$watchCollection(exp, function(newVal, oldVal){
