@@ -1,6 +1,6 @@
 angular
   .module('crimeChartApp')
-  .directive('pieChart', function ($window, $parse) {
+  .directive('pieChart', function ($window, $parse, $timeout) {
     return{
       restrict: 'EA',
       template: "<svg></svg>",
@@ -9,26 +9,29 @@ angular
         var exp = $parse(attrs.chartData);
         var dataToPlot = exp(scope);
         var d3 = $window.d3;
-        var rawSvg = elem.find("svg");
-        var svg = d3.select(rawSvg[0]);
 
-        function drawChart(){
-          var w = 960;
-          var h = 450;
+        function drawChart(width){
+          console.log("drawing");
+          var rawSvg = elem.find("svg");
+          var svg = d3.select(rawSvg[0]);
+
+          var w = width;
+          var h = 230;
           var r = Math.min(w, h)/2;
 
           var color = d3.scale.category20c();
           var vis = svg.data([dataToPlot])
-            .attr("width", w)
+            .attr("width", "100%")
             .attr("height", h)
-            .append("svg:g").attr("transform", "translate(" + w/2 + "," + h/2 + ")");
+            .append("svg:g")
+            .attr("transform", "translate(" + w/2 + "," + h/2 + ")");
 
           var slices = vis.append("svg:g").attr("class", "slices");
           var labels = vis.append("svg:g").attr("class", "labels");
           var lines = vis.append("svg:g").attr("class", "lines");
 
           var pie = d3.layout.pie().value(function(d){return d.value;});
-          var arc = d3.svg.arc().outerRadius(r * 0.8).innerRadius(r * 0.4);
+          var arc = d3.svg.arc().outerRadius(r * 0.8).innerRadius(0);
 
           var arcs = slices
             .selectAll("g.slice")
@@ -112,7 +115,7 @@ angular
             .append("polyline")
             .style("opacity",.3)
             .style("stroke", "black")
-            .style("stroke-width", "2px")
+            .style("stroke-width", "1px")
             .style("fill", "none");
 
           polyline.transition().duration(1000)
@@ -133,10 +136,13 @@ angular
         }
 
         scope.$watchCollection(exp, function(newVal, oldVal){
-          if (newVal.length > 0){
+          if (newVal.length > 0 ){
             dataToPlot = newVal;
-            drawChart();
           }
+        });
+
+        $timeout(function(){
+          drawChart(elem[0].clientWidth);
         });
       }
     };
