@@ -30,10 +30,11 @@ angular
           var maxValue = Math.max.apply(null, values);
           var ticksCount = maxValue/10 + 1;
 
-          var height = 500;
+          var fullBarHeight = 30;
+          var height = fullBarHeight*labelsLength;
           var chartHeight = height * 0.9;
-          var barHeight = (chartHeight/ labelsLength)*2/3;
-          var labelTextShift = chartHeight/ labelsLength + 5;
+          var barHeight = fullBarHeight*2/3;
+          var labelTextShift = fullBarHeight + 5;
 
           var canvas = svg
             .attr({'width':width,'height':height});
