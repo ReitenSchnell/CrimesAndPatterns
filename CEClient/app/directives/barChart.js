@@ -15,6 +15,7 @@ angular
           var svg = d3.select(rawSvg[0]);
 
           var colors = ['#0000b4','#0082ca','#0094ff','#0d4bcf','#0066AE','#074285','#00187B','#285964','#405F83','#416545','#4D7069','#6E9985','#7EBC89','#0283AF','#79BCBF','#99C19E'];
+          //var colors = d3.scale.category20c();
           var labels = dataToPlot.map(function(item) {
             return item.label;
           });
@@ -22,6 +23,7 @@ angular
           var values = dataToPlot.map(function(item) {
             return item.value;
           });
+          var sum = values.reduce(function(a, b) { return a + b; }, 0);
 
           var labelsLength = labels.length;
 
@@ -34,7 +36,7 @@ angular
           var height = fullBarHeight*labelsLength;
           var chartHeight = height * 0.9;
           var barHeight = fullBarHeight*2/3;
-          var labelTextShift = fullBarHeight + 5;
+          var labelTextShift = fullBarHeight + 3;
 
           var canvas = svg
             .attr({'width':width,'height':height});
@@ -79,6 +81,10 @@ angular
             .attr('id','yaxis')
             .call(yAxis);
 
+          function getPercent(value){
+            return parseFloat(Math.round(value * 100) / sum).toFixed(2) + '%';
+          }
+
           var chart = canvas.append('g')
             .attr("transform", "translate(150,0)")
             .attr('id','bars')
@@ -89,7 +95,9 @@ angular
             .attr('height', barHeight)
             .attr({'x':0,'y':function(d,i){ return yscale(i) + barHeight; }})
             .style('fill',function(d,i){ return colorScale(i); })
-            .attr('width',function(d){ return 0; });
+            .attr('width',function(d){ return 0; })
+            .append("svg:title")
+            .text(function(d, i) { return dataToPlot[i].label + ': '+ getPercent(dataToPlot[i].value); });
 
           var transit = d3.select("svg").selectAll("rect")
             .data(values)
@@ -101,7 +109,7 @@ angular
             .on("mouseover", function(e){
               $(this)
                 .attr("fill-opacity", ".5")
-                .css({"stroke": "green", "stroke-width": "1px"});
+                .css({"stroke": "blue", "stroke-width": "1px"});
             })
             .on("mouseout",function(e){
               $(this)
@@ -109,16 +117,19 @@ angular
                 .css({"stroke-width": "0px"});
             });
 
+          svg.selectAll(".tick > text")
+            .style("font-size","11px");
+
           var transitext = d3.select('#bars')
             .selectAll('text')
             .data(values)
             .enter()
             .append('text')
             .attr({
-              'x':function(d) {return xscale(d)- valueTextShift; },
+              'x':function(d) {return xscale(d)- valueTextShift <= 0 ? -1000 : xscale(d)- valueTextShift; },
               'y':function(d,i){ return yscale(i) + labelTextShift; }})
             .attr("style","cursor:default;")
-            .text(function(d){ return d; }).style({'fill':'#fff','font-size':'14px'});
+            .text(function(d){ return getPercent(d); }).style({'fill':'#fff','font-size':'11px'});
         }
 
         scope.$watchCollection(exp, function(newVal, oldVal){
