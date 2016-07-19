@@ -14,8 +14,6 @@ angular
           var rawSvg = elem.find("svg");
           var svg = d3.select(rawSvg[0]);
 
-          var colors = ['#0000b4','#0082ca','#0094ff','#0d4bcf','#0066AE','#074285','#00187B','#285964','#405F83','#416545','#4D7069','#6E9985','#7EBC89','#0283AF','#79BCBF','#99C19E'];
-          //var colors = d3.scale.category20c();
           var labels = dataToPlot.map(function(item) {
             return item.label;
           });
@@ -28,7 +26,6 @@ angular
           var labelsLength = labels.length;
 
           var chartWidth = width * 0.8;
-          var valueTextShift = chartWidth * 0.1;
           var maxValue = Math.max.apply(null, values);
           var ticksCount = maxValue/10 + 1;
 
@@ -58,9 +55,7 @@ angular
             .domain([0, labelsLength])
             .range([0, chartHeight]);
 
-          var colorScale = d3.scale.quantize()
-            .domain([0, labelsLength])
-            .range(colors);
+          var colorScale = d3.scale.category20c();
 
           var	xAxis = d3.svg.axis();
           xAxis
@@ -109,7 +104,7 @@ angular
             .on("mouseover", function(e){
               $(this)
                 .attr("fill-opacity", ".5")
-                .css({"stroke": "blue", "stroke-width": "1px"});
+                .css({"stroke": d3.rgb(d3.select(this).style("fill")).darker(1), "stroke-width": "1px"});
             })
             .on("mouseout",function(e){
               $(this)
@@ -120,16 +115,16 @@ angular
           svg.selectAll(".tick > text")
             .style("font-size","11px");
 
-          var transitext = d3.select('#bars')
-            .selectAll('text')
-            .data(values)
-            .enter()
-            .append('text')
-            .attr({
-              'x':function(d) {return xscale(d)- valueTextShift <= 0 ? -1000 : xscale(d)- valueTextShift; },
-              'y':function(d,i){ return yscale(i) + labelTextShift; }})
-            .attr("style","cursor:default;")
-            .text(function(d){ return getPercent(d); }).style({'fill':'#fff','font-size':'11px'});
+          //var transitext = d3.select('#bars')
+          //  .selectAll('text')
+          //  .data(values)
+          //  .enter()
+          //  .append('text')
+          //  .attr({
+          //    'x':function(d) {return xscale(d)- valueTextShift <= 0 ? -1000 : xscale(d)- valueTextShift; },
+          //    'y':function(d,i){ return yscale(i) + labelTextShift; }})
+          //  .attr("style","cursor:default;")
+          //  .text(function(d){ return getPercent(d); }).style({'fill':'#fff','font-size':'11px'});
         }
 
         scope.$watchCollection(exp, function(newVal, oldVal){

@@ -58,7 +58,7 @@ angular
             .on("mouseover", function(e){
               $(this)
                 .attr("fill-opacity", ".5")
-                .css({"stroke": "green", "stroke-width": "1px"});
+                .css({"stroke": d3.rgb(d3.select(this).style("fill")).darker(1), "stroke-width": "1px"});
             })
             .on("mouseout",function(e){
               $(this)
