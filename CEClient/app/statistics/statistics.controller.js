@@ -1,6 +1,6 @@
 angular
   .module('crimeChartApp')
-  .controller('MainController', function ($scope, dataService, $q) {
+  .controller('StatisticsController', function ($scope, dataService, $q) {
     function activate() {
       var promises = [getTestData(), getCrimesByPlace(), getCrimesByType()];
       return $q.all(promises).then(function() {
@@ -28,5 +28,5 @@ angular
       return dataService.getCrimesByType().then(function (data) {
         $scope.crimesByType = data.data;
       });
-    };
+    }
   });

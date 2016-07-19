@@ -8,7 +8,10 @@
   <link href="lib.css" rel="stylesheet">
   <link href="app.css?rev=@@hash" rel="stylesheet">
 </head>
-<body ng-cloak>
+<body>
+<ul class="nav nav-tabs" ng-controller="TabsController">
+  <li ng-class="tabClass(tab)" ng-repeat="tab in tabs" tab="tab"><a href="{{tab.link}}" ng-click="setSelectedTab(tab)">{{tab.label}}</a></li>
+</ul>
 <div ng-view></div>
 
 <script src="lib.js"></script>
