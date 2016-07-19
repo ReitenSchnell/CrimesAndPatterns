@@ -18,10 +18,10 @@ angular
             return item.label;
           });
           labels.unshift('');
+
           var values = dataToPlot.map(function(item) {
             return item.value;
           });
-          var sum = values.reduce(function(a, b) { return a + b; }, 0);
 
           var labelsLength = labels.length;
 
@@ -33,7 +33,6 @@ angular
           var height = fullBarHeight*labelsLength;
           var chartHeight = height * 0.9;
           var barHeight = fullBarHeight*2/3;
-          var labelTextShift = fullBarHeight + 3;
 
           var canvas = svg
             .attr({'width':width,'height':height});
@@ -76,10 +75,6 @@ angular
             .attr('id','yaxis')
             .call(yAxis);
 
-          function getPercent(value){
-            return parseFloat(Math.round(value * 100) / sum).toFixed(2) + '%';
-          }
-
           var chart = canvas.append('g')
             .attr("transform", "translate(150,0)")
             .attr('id','bars')
@@ -92,7 +87,7 @@ angular
             .style('fill',function(d,i){ return colorScale(i); })
             .attr('width',function(d){ return 0; })
             .append("svg:title")
-            .text(function(d, i) { return dataToPlot[i].label + ': '+ getPercent(dataToPlot[i].value); });
+            .text(function(d, i) { return dataToPlot[i].label + ': '+ dataToPlot[i].fraction; });
 
           var transit = d3.select("svg").selectAll("rect")
             .data(values)
@@ -114,17 +109,6 @@ angular
 
           svg.selectAll(".tick > text")
             .style("font-size","11px");
-
-          //var transitext = d3.select('#bars')
-          //  .selectAll('text')
-          //  .data(values)
-          //  .enter()
-          //  .append('text')
-          //  .attr({
-          //    'x':function(d) {return xscale(d)- valueTextShift <= 0 ? -1000 : xscale(d)- valueTextShift; },
-          //    'y':function(d,i){ return yscale(i) + labelTextShift; }})
-          //  .attr("style","cursor:default;")
-          //  .text(function(d){ return getPercent(d); }).style({'fill':'#fff','font-size':'11px'});
         }
 
         scope.$watchCollection(exp, function(newVal, oldVal){

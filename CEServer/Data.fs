@@ -8,7 +8,7 @@ module Data =
     type CrimeReport = CsvProvider<"sample.csv", AssumeMissingValues  = true>
     type CrimeReportRow = CrimeReport.Row
     type Crime = {Place : string; Type : string; Outcome : string}
-    type Statistics = {Label : string; Value : float}    
+    type Statistics = {Label : string; Value : float; Fraction : float}    
 
     let pathToData = __SOURCE_DIRECTORY__ + @"..\..\Data\CrimeEngland1\"
 
@@ -47,18 +47,23 @@ module Data =
 
     let getGroupedData extractor (crimes:Crime seq) =
         crimes
-        |> Seq.groupBy extractor
+        |> Seq.groupBy extractor 
+
+    let mapListToWrappers (pairs: (string * int) seq) =
+        let overall = pairs |> Seq.sumBy(fun (_, v) -> v) |> (float)
+        pairs
+        |> Seq.map(fun(l,v) -> {Label = l; Value = (float) v; Fraction = System.Math.Round(100.0 * (float) v / overall, 2)})        
 
     let crimesByPlace (crimes:Crime seq) =
         crimes                
         |> Seq.countBy extractPlace
         |> Seq.toList
-        |> Seq.map (fun (l,v) -> {Label = l; Value = float v})
+        |> mapListToWrappers
 
     let crimesByType (crimes:Crime seq) =
         crimes                
         |> Seq.countBy extractType
         |> Seq.toList
-        |> Seq.map (fun (l,v) -> {Label = l; Value = float v})
+        |> mapListToWrappers
 
 

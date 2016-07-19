@@ -13,13 +13,6 @@ angular
         function drawChart(width){
           var rawSvg = elem.find("svg");
           var svg = d3.select(rawSvg[0]);
-          var values = dataToPlot.map(function(item) {
-            return item.value;
-          });
-          var sum = values.reduce(function(a, b) { return a + b; }, 0);
-          function getPercent(value){
-            return parseFloat(Math.round(value * 100) / sum).toFixed(2) + '%';
-          }
 
           var w = width;
           var h = 230;
@@ -67,7 +60,7 @@ angular
             })
             .attr("style","cursor:pointer;")
             .append("svg:title")
-            .text(function(d, i) { return dataToPlot[i].label + ': '+ getPercent(dataToPlot[i].value); });
+            .text(function(d, i) { return dataToPlot[i].label + ': '+ dataToPlot[i].fraction; });
 
           var key = function(d,i){ return dataToPlot[i].label; };
 
