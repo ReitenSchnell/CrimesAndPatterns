@@ -2,17 +2,22 @@
 <html ng-app="crimeChartApp">
 <head>
   <meta charset="utf-8">
-  <title>Law&Order</title>
+  <title>TinyML</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link href="lib.css" rel="stylesheet">
   <link href="app.css?rev=@@hash" rel="stylesheet">
 </head>
-<body>
-<ul class="nav nav-tabs" ng-controller="TabsController">
-  <li ng-class="tabClass(tab)" ng-repeat="tab in tabs" tab="tab"><a href="{{tab.link}}" ng-click="setSelectedTab(tab)">{{tab.label}}</a></li>
-</ul>
-<div ng-view></div>
+<body ng-cloak>
+<div class="container">
+  <div class="text-center">
+    <h1>TinyML</h1>
+  </div>
+  <ul class="nav nav-pills" ng-controller="TabsController">
+    <li ng-class="tabClass(tab)" ng-repeat="tab in tabs" tab="tab"><a href="{{tab.link}}" ng-click="setSelectedTab(tab)">{{tab.label}}</a></li>
+  </ul>
+  <div ng-view></div>
+</div>
 
 <script src="lib.js"></script>
 <script src="templates.js"></script>

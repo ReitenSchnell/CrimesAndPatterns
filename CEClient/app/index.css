@@ -2,59 +2,6 @@ html {
   font-family: 'Roboto Slab', serif;
 }
 
-.loginBox md-toolbar {
-  background-color: rgb(198, 53, 80);
-}
-
-md-toolbar.header {
-  background-color: rgb(198, 53, 80);
-}
-
-md-toolbar.card-header {
-  background-color: rgb(198, 53, 80);
-}
-
-md-toolbar.md-hue-2.user-info {
-  background-color: #ebebeb;
-  color: rgb(198,53,80);
-}
-
-.user-info .user-avatar {
-  border-radius: 99%;
-}
-
-.user-info .email {
-  font-size: 12px;
-}
-
-.md-button {
-  background-color: white;
-  color: rgb(198,53,80);
-}
-
-.md-button.md-raised {
-  background-color: white;
-  color: rgb(198,53,80);
-}
-
-.md-button.md-raised.facebook {
-  background-color: rgb(52,130,192);
-  color: white;
-}
-
-.loginBox {
-  max-width: 90%;
-  width: 500px
-}
-
-md-content.login-form {
-  background-color: white;
-}
-
-md-input-container:not(.md-input-invalid).md-input-focused .md-input {
-  border-color: black;
-}
-
-md-input-container:not(.md-input-invalid).md-input-focused label {
-  color: black;
+.spacer {
+  margin-top: 20px; /* define margin as you see fit */
 }
