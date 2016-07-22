@@ -22,8 +22,6 @@ let places = getPossibleValues extractPlace data
 let types = getPossibleValues extractType data
 let byPlace = crimesByPlace data
 let byType = crimesByType data
-type Test = {Hour:int; Sales:int}
-let test = [{Hour=1; Sales=50}; {Hour=2; Sales=40}; {Hour=3; Sales=60}; {Hour=4; Sales=30}; {Hour=5; Sales=35}; {Hour=6; Sales=55} ]
 
 let app =
     choose
@@ -37,7 +35,7 @@ let app =
               path "/lib.css" >=> file "lib.css"; browseHome
               path "/lib.js" >=> file "lib.js"; browseHome
               path "/template.js" >=> file "template.js"; browseHome
-              path "/api/test" >=> json test
+              path "/world.json" >=> file "world.json"; browseHome
               path "/api/places" >=> json places
               path "/api/crimes/byplace" >=> json byPlace
               path "/api/crimes/bytype" >=> json byType

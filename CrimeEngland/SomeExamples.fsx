@@ -62,3 +62,31 @@ let EMPTY = StackContents []
 
 let result321 = EMPTY |> ONE |> TWO |> THREE
 let result123 = EMPTY |> THREE |> TWO |> ONE
+
+let pop (StackContents contents) =
+    match contents with
+    | top::rest ->
+        let newStack = StackContents rest
+        (top, newStack)
+    | [] -> failwith "Stack underflow"
+
+let initialStack = EMPTY |> ONE |> TWO
+let popped, poppedStack = pop initialStack
+let popped2, poppedStack2 = pop poppedStack
+
+let ADD stack =
+    let x, s = pop stack
+    let y, s2 = pop s
+    let result = x + y
+    s2 |> push result
+
+let MUL stack =
+    let x, s = pop stack
+    let y, s2 = pop s
+    let result = x * y
+    s2 |> push result
+
+let add1and2 = EMPTY |> ONE |> TWO |> ADD
+let add2and3 = EMPTY |> TWO |> THREE |> ADD
+let mult2and3 = EMPTY |> TWO |> THREE |> MUL
+
