@@ -69,7 +69,8 @@ gulp.task('libJS', function() {
     './bower_components/angular-touch/angular-touch.min.js',
     './bower_components/moment/min/moment.min.js',
     './bower_components/d3/d3.min.js',
-    './bower_components/topojson/topojson.min.js'
+    './bower_components/topojson/topojson.min.js',
+    './bower_components/underscore/underscore-min.js'
   ])
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('./build'));

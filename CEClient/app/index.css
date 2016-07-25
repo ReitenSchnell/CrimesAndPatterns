@@ -5,3 +5,14 @@ html {
 .spacer {
   margin-top: 20px; /* define margin as you see fit */
 }
+
+.mesh {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+  stroke-linejoin: round;
+}
+
+.feature {
+  fill: #777;
+}
