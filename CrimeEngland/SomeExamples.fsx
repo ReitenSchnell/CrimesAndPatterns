@@ -74,19 +74,29 @@ let initialStack = EMPTY |> ONE |> TWO
 let popped, poppedStack = pop initialStack
 let popped2, poppedStack2 = pop poppedStack
 
-let ADD stack =
-    let x, s = pop stack
-    let y, s2 = pop s
-    let result = x + y
-    s2 |> push result
+let binary mathFn stack =
+    let y, stack' = pop stack
+    let x, stack'' = pop stack'
+    let result = mathFn x y
+    push result stack''
 
-let MUL stack =
-    let x, s = pop stack
-    let y, s2 = pop s
-    let result = x * y
-    s2 |> push result
+let unary mathFn stack =
+    let x, stack' = pop stack
+    let y = mathFn x
+    push y stack'
+
+let ADD = binary (+)
+let MUL = binary (*)
+let SUB = binary (-)
+let DIV = binary (/)
+let NEG = unary (fun x -> -x)
+let SQUARE = unary (fun x -> x*x)
 
 let add1and2 = EMPTY |> ONE |> TWO |> ADD
 let add2and3 = EMPTY |> TWO |> THREE |> ADD
 let mult2and3 = EMPTY |> TWO |> THREE |> MUL
+let div2by3 = EMPTY |> THREE |> TWO |> DIV
+let sub2from5 = EMPTY |> TWO |> FIVE |> SUB
+let neg3 = EMPTY |> THREE |> NEG
+let square5 = EMPTY |> FIVE |> SQUARE
 
