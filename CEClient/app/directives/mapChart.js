@@ -38,6 +38,7 @@ angular
         $window._.each(areas, function(a) {
           areadata[a]=a.charCodeAt(0);
         });
+        color.domain(d3.extent(_.toArray(areadata)));
 
         svg
           .attr("width", width)
