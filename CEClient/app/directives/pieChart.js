@@ -4,13 +4,16 @@ angular
     return{
       restrict: 'EA',
       template: "<svg></svg>",
+      scope: { chartData : '='},
 
       link: function(scope, elem, attrs){
-        var exp = $parse(attrs.chartData);
-        var dataToPlot = exp(scope);
         var d3 = $window.d3;
+        var dataToPlot, width;
 
-        function drawChart(width){
+        function drawChart(){
+          if (!dataToPlot || !width)
+            return;
+
           var rawSvg = elem.find("svg");
           var svg = d3.select(rawSvg[0]);
 
@@ -135,14 +138,15 @@ angular
             .remove();
         }
 
-        scope.$watchCollection(exp, function(newVal, oldVal){
-          if (newVal.length > 0 ){
-            dataToPlot = newVal;
-          }
+        scope.$watch('chartData', function(data){
+          if(!data) return;
+          dataToPlot = data;
+          drawChart();
         });
 
         $timeout(function(){
-          drawChart(elem[0].clientWidth);
+          width = elem[0].clientWidth;
+          drawChart();
         });
       }
     };
