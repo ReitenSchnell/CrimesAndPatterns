@@ -7,22 +7,11 @@ angular
       scope: { regions: '=' , boundaries : '='},
 
       link: function(scope, elem, attrs){
-        var exp = $parse(attrs.chartData);
         var d3 = $window.d3;
         var rawSvg = elem.find("svg");
         var svg = d3.select(rawSvg[0]);
 
-        var width = 960, height = 1160;
-
-        var projection = d3.geo.albers()
-          .center([0, 55.4])
-          .rotate([4.4, 0])
-          .parallels([50, 60])
-          .scale(1200 * 5)
-          .translate([width / 2, height / 2]);
-
-        var path = d3.geo.path()
-          .projection(projection);
+        var regionsData, boundariesData, width;
 
         var color = d3.scale.quantize().range([
           "rgb(198,219,239)",
@@ -40,20 +29,51 @@ angular
         });
         color.domain(d3.extent(_.toArray(areadata)));
 
-        svg
-          .attr("width", width)
-          .attr("height", height);
-
         scope.$watch('regions', function(geo){
           if(!geo) return;
+          regionsData = geo;
+          drawChart();
+        });
+
+        scope.$watch('boundaries', function(geo){
+          if(!geo) return;
+          boundariesData = geo;
+          drawChart();
+        });
+
+        $timeout(function(){
+          width = elem[0].clientWidth;
+          drawChart();
+        });
+
+        function drawChart(){
+          if (!regionsData || !boundariesData || !width)
+            return;
+          
+          var height = width * 1;
+
+          var projection = d3.geo.albers()
+            .center([0, 55.4])
+            .rotate([4.4, 0])
+            .parallels([50, 60])
+            .scale(height * 5)
+            .translate([width / 2, height / 2]);
+
+          var path = d3.geo.path()
+            .projection(projection);
+
+          svg
+            .attr("width", width)
+            .attr("height", height);
+
           svg.selectAll(".subunit")
-            .data(geo)
+            .data(regionsData)
             .enter().append("path")
             .attr("class", "feature")
             .attr("d", path);
 
           var areas = svg.selectAll(".postcode_area")
-            .data(geo)
+            .data(regionsData)
             .enter().append("path")
             .attr("class", "postcode_area")
             .attr("d", path);
@@ -72,16 +92,13 @@ angular
               } else {
                 return "#AAA";
               }
-            })
-        });
+            });
 
-        scope.$watch('boundaries', function(geo){
-          if(!geo) return;
           svg.append("path")
-            .datum(geo)
+            .datum(boundariesData)
             .attr("class", "mesh")
             .attr("d", path);
-        });
+        }
       }
     }
   });
