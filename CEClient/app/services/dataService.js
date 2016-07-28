@@ -13,6 +13,11 @@ angular.module('crimeChartApp').factory('dataService', function($http, $q){
         getCrimesByType : function(){
           var data = $http.get(apiUrl + 'crimes/bytype');
           return $q.when(data);
+        },
+
+        getTypes : function(){
+          var data = $http.get(apiUrl + 'types');
+          return $q.when(data);
         }
     }
 });

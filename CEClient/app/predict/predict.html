@@ -1,6 +1,16 @@
 <div class="row">
+  <div class="col-md-3">
+    <h3>Will suspect be found?</h3>
+  </div>
+  <div class="col-md-6">
+    <h3><select  ng-model="selectedType" ng-options="c for c in types"></select></h3>
+  </div>
+</div>
+<div class="row">
   <div class="col-lg-6">
     <div map-chart regions="regions" boundaries="boundaries"></div>
   </div>
-  <div class="col-lg-6"></div>
+  <!--<div class="col-lg-6">-->
+    <!--<h3><select  ng-model="selectedType" ng-options="c for c in types"></select></h3>-->
+  <!--</div>-->
 </div>
