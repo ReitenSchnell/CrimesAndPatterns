@@ -2,6 +2,10 @@
 #r @"Suave.1.1.3\lib\net40\Suave.dll"
 #r @"Newtonsoft.Json.8.0.3\lib\net40\Newtonsoft.Json.dll"
 #r @"FSharp.Data.2.3.0\lib\net40\FSharp.Data.dll"
+#r @"Accord.3.0.2\lib\net45\Accord.dll"
+#r @"Accord.MachineLearning.3.0.2\lib\net45\Accord.MachineLearning.dll"
+#r @"Accord.Statistics.3.0.2\lib\net45\Accord.Statistics.dll"
+#r @"Accord.Math.3.0.2\lib\net45\Accord.Math.dll"
 #load "Web.fs"
 #load "Data.fs"
 
@@ -22,6 +26,7 @@ let places = getPossibleValues extractPlace data
 let types = getPossibleValues extractType data
 let byPlace = crimesByPlace data
 let byType = crimesByType data
+let accuracy = learn data
 
 let app =
     choose
@@ -40,6 +45,7 @@ let app =
               path "/api/crimes/byplace" >=> json byPlace
               path "/api/crimes/bytype" >=> json byType
               path "/api/types" >=> json types
+              path "/api/accuracy" >=> json accuracy
              ]          
         ]
 
