@@ -20,13 +20,13 @@ open CEServer.Web
 open CEServer.Data
 open Suave.Redirection
 open Suave.Writers
+open System.Web
 
-let data = prepareData
-let places = getPossibleValues extractPlace data
-let types = getPossibleValues extractType data
-let byPlace = crimesByPlace data
-let byType = crimesByType data
-let accuracy = learn data
+let places, crimeTypes, crimes = prepareData
+let byPlace = crimesByPlace crimes places
+let byType = crimesByType crimes crimeTypes
+let tree = learn crimes places crimeTypes
+let prediction = predict tree places
 
 let app =
     choose
@@ -44,10 +44,11 @@ let app =
               path "/api/places" >=> json places
               path "/api/crimes/byplace" >=> json byPlace
               path "/api/crimes/bytype" >=> json byType
-              path "/api/types" >=> json types
-              path "/api/accuracy" >=> json accuracy
+              path "/api/types" >=> json crimeTypes              
+              pathScan "/api/predict/%s" (fun (a:string) -> json (prediction a))              
              ]          
         ]
 
 startWebServer { defaultConfig with homeFolder = Some @"C:\Repository\Learning\TinyML\CEClient\build" } app
+
 
