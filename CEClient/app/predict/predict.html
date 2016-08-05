@@ -3,7 +3,7 @@
     <h3>Will suspect be found?</h3>
   </div>
   <div class="col-md-6">
-    <h3><select  ng-model="selectedType" ng-options="c for c in types"></select></h3>
+    <h3><select  ng-model="selectedType" ng-options="c.label for c in types" ng-change = "predict()"></select></h3>
   </div>
 </div>
 <div class="row">

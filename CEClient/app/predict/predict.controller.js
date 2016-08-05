@@ -17,5 +17,12 @@ angular
       console.log('error', reason);
     });
 
-    $scope.selectedType = {}
+    $scope.selectedType = {};
+
+    $scope.predict = function(){
+      dataService.predictSuspect($scope.selectedType.id).then(function(data){
+        $scope.predictions = data.data;
+        console.log($scope.predictions);
+      })
+    }
   });
