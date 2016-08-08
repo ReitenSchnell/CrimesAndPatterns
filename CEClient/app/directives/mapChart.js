@@ -49,8 +49,8 @@ angular
         function drawChart(){
           if (!regionsData || !boundariesData || !width)
             return;
-          
-          var height = width * 1;
+
+          var height = width * 1.5;
 
           var projection = d3.geo.albers()
             .center([0, 55.4])
