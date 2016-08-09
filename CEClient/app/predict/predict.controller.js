@@ -9,6 +9,14 @@ angular
       });
     });
 
+    d3.json('tregions.json', function(err, uk){
+      if(err) throw err;
+      $scope.$apply(function(){
+          var object = uk.objects['west-yorkshire'];
+          $scope.forces = topojson.feature(uk, object).features;
+      });
+    });
+
     dataService.getTypes().then(function(data){
       $timeout(function() {
         $scope.types = data.data;

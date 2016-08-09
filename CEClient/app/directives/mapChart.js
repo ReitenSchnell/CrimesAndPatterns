@@ -4,14 +4,14 @@ angular
     return{
       restrict: 'EA',
       template: "<svg></svg>",
-      scope: { regions: '=' , boundaries : '='},
+      scope: { regions: '=' , boundaries : '=', forces : '='},
 
       link: function(scope, elem, attrs){
         var d3 = $window.d3;
         var rawSvg = elem.find("svg");
         var svg = d3.select(rawSvg[0]);
 
-        var regionsData, boundariesData, width;
+        var regionsData, boundariesData, width, forces;
 
         var color = d3.scale.quantize().range([
           "rgb(198,219,239)",
@@ -41,13 +41,19 @@ angular
           drawChart();
         });
 
+        scope.$watch('forces', function(geo){
+          if(!geo) return;
+          forces = geo;
+          drawChart();
+        });
+
         $timeout(function(){
           width = elem[0].clientWidth;
           drawChart();
         });
 
         function drawChart(){
-          if (!regionsData || !boundariesData || !width)
+          if (!regionsData || !boundariesData || !width || !forces)
             return;
 
           var height = width * 1.5;
@@ -72,32 +78,44 @@ angular
             .attr("class", "feature")
             .attr("d", path);
 
-          var areas = svg.selectAll(".postcode_area")
-            .data(regionsData)
-            .enter().append("path")
-            .attr("class", "postcode_area")
-            .attr("d", path);
-
-          areas
-            .append("svg:title")
-            .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
-            .attr("dy", ".35em")
-            .text(function (d) { return d.id; });
-
-          areas
-            .style("fill", function(d) {
-              var value = areadata[d.id];
-              if (value) {
-                return color(value);
-              } else {
-                return "#AAA";
-              }
-            });
+          //var areas = svg.selectAll(".postcode_area")
+          //  .data(regionsData)
+          //  .enter().append("path")
+          //  .attr("class", "postcode_area")
+          //  .attr("d", path);
+          //
+          //areas
+          //  .append("svg:title")
+          //  .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
+          //  .attr("dy", ".35em")
+          //  .text(function (d) { return d.id; });
+          //
+          //areas
+          //  .style("fill", function(d) {
+          //    var value = areadata[d.id];
+          //    if (value) {
+          //      return color(value);
+          //    } else {
+          //      return "#AAA";
+          //    }
+          //  });
 
           svg.append("path")
             .datum(boundariesData)
             .attr("class", "mesh")
             .attr("d", path);
+
+          var forcesBoundaries = svg.selectAll(".force").data(forces);
+
+          forcesBoundaries.enter().insert("path")
+            .attr("class", "force_notfound")
+            .attr("d", path);
+
+          forcesBoundaries
+            .append("svg:title")
+            .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
+            .attr("dy", ".35em")
+            .text(function (d) { return 'west-yorkshire;' });
         }
       }
     }

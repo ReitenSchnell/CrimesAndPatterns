@@ -13,6 +13,20 @@ html {
   stroke-linejoin: round;
 }
 
+.force_found {
+  fill: green;
+  stroke: #fff;
+  stroke-width: .5px;
+  stroke-linejoin: round;
+}
+
+.force_notfound {
+  fill: red;
+  stroke: #fff;
+  stroke-width: .5px;
+  stroke-linejoin: round;
+}
+
 .feature {
-  fill: #777;
+  fill: rgb(33, 113, 181);
 }
