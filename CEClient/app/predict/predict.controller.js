@@ -12,8 +12,13 @@ angular
     d3.json('tregions.json', function(err, uk){
       if(err) throw err;
       $scope.$apply(function(){
-          var object = uk.objects['west-yorkshire'];
-          $scope.forces = topojson.feature(uk, object).features;
+          var objects = uk.objects;
+          $scope.forces = [];
+          for (var key in objects) {
+            if (objects.hasOwnProperty(key)) {
+              $scope.forces.push({name : key, value : topojson.feature(uk, objects[key]).features[0]})
+            }
+          }
       });
     });
 

@@ -26,7 +26,7 @@ module Data =
             |> Seq.concat
             |> Seq.toList
 
-        let extractPlaceRow(row : CrimeReportRow) = row.``Reported by``
+        let extractPlaceRow(row : CrimeReportRow) = row.``Reported by``.Replace(" Police", "")
         let extractTypeRow(row : CrimeReportRow) = row.``Crime type``
         let extractOutcomeRow(row : CrimeReportRow) = row.``Last outcome category``
 

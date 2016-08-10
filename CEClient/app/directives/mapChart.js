@@ -13,22 +13,6 @@ angular
 
         var regionsData, boundariesData, width, forces;
 
-        var color = d3.scale.quantize().range([
-          "rgb(198,219,239)",
-          "rgb(158,202,225)",
-          "rgb(107,174,214)",
-          "rgb(66,146,198)",
-          "rgb(33,113,181)",
-          "rgb(8,81,156)",
-          "rgb(8,48,107)"]);
-
-        var areas=["AB", "AL", "B", "BA", "BB", "BD", "BH", "BL", "BN", "BR", "BS", "BT", "CA", "CB", "CF", "CH", "CM", "CO", "CR", "CT", "CV", "CW", "DA", "DD", "DE", "DG", "DH", "DL", "DN", "DT", "DY", "E", "EC", "EH", "EN", "EX", "FK", "FY", "G", "GL", "GU", "HA", "HD", "HG", "HP", "HR", "HS", "HU", "HX", "IG", "IP", "IV", "KA", "KT", "KW", "KY", "L", "LA", "LD", "LE", "LL", "LN", "LS", "LU", "M", "ME", "MK", "ML", "N", "NE", "NG", "NN", "NP", "NR", "NW", "OL", "OX", "PA", "PE", "PH", "PL", "PO", "PR", "RG", "RH", "RM", "S", "SA", "SE", "SG", "SK", "SL", "SM", "SN", "SO", "SP", "SR", "SS", "ST", "SW", "SY", "TA", "TD", "TF", "TN", "TQ", "TR", "TS", "TW", "UB", "W", "WA", "WC", "WD", "WF", "WN", "WR", "WS", "WV", "YO", "ZE"];
-        var areadata={};
-        $window._.each(areas, function(a) {
-          areadata[a]=a.charCodeAt(0);
-        });
-        color.domain(d3.extent(_.toArray(areadata)));
-
         scope.$watch('regions', function(geo){
           if(!geo) return;
           regionsData = geo;
@@ -56,6 +40,14 @@ angular
           if (!regionsData || !boundariesData || !width || !forces)
             return;
 
+          var mapLabels = forces.map(function(item) {
+            return item.name;
+          });
+
+          var mapValues = forces.map(function(item) {
+            return item.value;
+          });
+
           var height = width * 1.5;
 
           var projection = d3.geo.albers()
@@ -78,34 +70,12 @@ angular
             .attr("class", "feature")
             .attr("d", path);
 
-          //var areas = svg.selectAll(".postcode_area")
-          //  .data(regionsData)
-          //  .enter().append("path")
-          //  .attr("class", "postcode_area")
-          //  .attr("d", path);
-          //
-          //areas
-          //  .append("svg:title")
-          //  .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
-          //  .attr("dy", ".35em")
-          //  .text(function (d) { return d.id; });
-          //
-          //areas
-          //  .style("fill", function(d) {
-          //    var value = areadata[d.id];
-          //    if (value) {
-          //      return color(value);
-          //    } else {
-          //      return "#AAA";
-          //    }
-          //  });
-
           svg.append("path")
             .datum(boundariesData)
             .attr("class", "mesh")
             .attr("d", path);
 
-          var forcesBoundaries = svg.selectAll(".force").data(forces);
+          var forcesBoundaries = svg.selectAll(".force").data(mapValues);
 
           forcesBoundaries.enter().insert("path")
             .attr("class", "force_notfound")
@@ -115,7 +85,7 @@ angular
             .append("svg:title")
             .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
             .attr("dy", ".35em")
-            .text(function (d) { return 'west-yorkshire;' });
+            .text(function (d, i) { return mapLabels[i] });
         }
       }
     }
