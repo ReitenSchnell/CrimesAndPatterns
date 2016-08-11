@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col-md-3">
-    <h3>Will suspect be found?</h3>
+    <h3>Will suspect <span class="text_notfound">(not)</span> <span class="text_found">be</span> found?</h3>
     <select  ng-model="selectedType" ng-options="c.label for c in types" ng-change = "predict()"></select>
   </div>
   <div class="col-md-4">
-    <div map-chart regions="regions" boundaries="boundaries" forces="forces"></div>
+    <div map-chart regions="regions" boundaries="boundaries" forces="forces" predictions="predictions"></div>
   </div>
 </div>
 

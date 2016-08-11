@@ -13,6 +13,14 @@ html {
   stroke-linejoin: round;
 }
 
+.text_found {
+  color: green;
+}
+
+.text_notfound {
+  color: red;
+}
+
 .force_found {
   fill: green;
   stroke: #fff;

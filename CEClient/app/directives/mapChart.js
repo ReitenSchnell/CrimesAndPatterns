@@ -4,14 +4,14 @@ angular
     return{
       restrict: 'EA',
       template: "<svg></svg>",
-      scope: { regions: '=' , boundaries : '=', forces : '='},
+      scope: { regions: '=' , boundaries : '=', forces : '=', predictions : '='},
 
       link: function(scope, elem, attrs){
         var d3 = $window.d3;
         var rawSvg = elem.find("svg");
         var svg = d3.select(rawSvg[0]);
 
-        var regionsData, boundariesData, width, forces;
+        var regionsData, boundariesData, width, forces, predictions;
 
         scope.$watch('regions', function(geo){
           if(!geo) return;
@@ -31,6 +31,12 @@ angular
           drawChart();
         });
 
+        scope.$watch('predictions', function(data){
+          if(!data) return;
+          predictions = data;
+          drawChart();
+        });
+
         $timeout(function(){
           width = elem[0].clientWidth;
           drawChart();
@@ -39,14 +45,6 @@ angular
         function drawChart(){
           if (!regionsData || !boundariesData || !width || !forces)
             return;
-
-          var mapLabels = forces.map(function(item) {
-            return item.name;
-          });
-
-          var mapValues = forces.map(function(item) {
-            return item.value;
-          });
 
           var height = width * 1.5;
 
@@ -75,17 +73,27 @@ angular
             .attr("class", "mesh")
             .attr("d", path);
 
-          var forcesBoundaries = svg.selectAll(".force").data(mapValues);
+          if (predictions){
+            var mapLabels = forces.map(function(item) {
+              return item.name;
+            });
 
-          forcesBoundaries.enter().insert("path")
-            .attr("class", "force_notfound")
-            .attr("d", path);
+            var mapValues = forces.map(function(item) {
+              return item.value;
+            });
 
-          forcesBoundaries
-            .append("svg:title")
-            .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
-            .attr("dy", ".35em")
-            .text(function (d, i) { return mapLabels[i] });
+            var forcesBoundaries = svg.selectAll(".force").data(mapValues);
+
+            forcesBoundaries.enter().insert("path")
+              .attr("class", function (d, i) { return predictions[i].item2 == 0 ? "force_notfound" : "force_found" })
+              .attr("d", path);
+
+            forcesBoundaries
+              .append("svg:title")
+              .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
+              .attr("dy", ".35em")
+              .text(function (d, i) { return mapLabels[i] });
+          }
         }
       }
     }
