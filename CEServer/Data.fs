@@ -4,7 +4,9 @@ module Data =
     
     open FSharp.Data
     open System.IO
-    open Accord.MachineLearning.DecisionTrees   
+    open Accord.MachineLearning.DecisionTrees
+    open Accord.Statistics.Distributions.DensityKernels
+    open Accord.MachineLearning
 
     type CrimeReport = CsvProvider<"sample.csv", AssumeMissingValues  = true>
     type CrimeReportRow = CrimeReport.Row
@@ -125,6 +127,24 @@ module Data =
         places
         |> Seq.map(fun place -> (place.Label, tree.Compute([|place.Id; System.Int32.Parse crimeType|])))
         |> Seq.toList
+
+    let calculateStatistics (crimes:Crime seq) =
+        let getStats (pairs: (int * int) seq) =
+            let getPercentage value sum = 100.0 * System.Math.Round((float) value / sum, 2)
+            let overall = pairs |> Seq.sumBy(fun (_, v) -> v) |> (float)
+            pairs
+            |> Seq.map (fun (_,v) -> getPercentage v overall)  
+        crimes
+        |> Seq.groupBy extractPlace
+        |> Seq.map(fun (l, vs) -> Seq.countBy extractType vs)
+        |> Seq.map(fun pairs -> getStats pairs)
+        |> Seq.map(fun values -> Seq.toArray values)
+        |> Seq.toArray
+
+    
+        
+
+
         
         
 

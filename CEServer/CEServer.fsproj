@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Web.fs" />
     <Compile Include="Data.fs" />
+    <Compile Include="Clusters.fs" />
     <None Include="app.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />
