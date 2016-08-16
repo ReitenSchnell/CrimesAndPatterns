@@ -1,4 +1,5 @@
 ﻿namespace CEServer
+open CEServer.Data
 
 module Clusters =
     
@@ -80,10 +81,13 @@ module Clusters =
         ||> Seq.map2(fun u1 u2 -> pown(u1-u2) 2)
         |> Seq.sum
 
-    let getClusters (data : double[][]) =
-        let observations = Array.length data
+    let getClusters (observations : (int*float[])[]) (entities : Entity list) =
+        let featuresCount = Array.length observations
+        let data = 
+            observations
+            |> Array.map(fun(_, arr) -> arr)
         let possibleKs = 
-            [2..observations-2]
+            [2..featuresCount-2]
             |> Seq.map(fun k ->
                 let value = 
                     [for _ in 1..1 ->
@@ -98,15 +102,15 @@ module Clusters =
             possibleKs
             |> Seq.minBy(fun (k,err) -> err)
         let (bestClusters, bestClassifier) =
-            let clustering = clusterize distance (centroidOf observations)            
+            let clustering = clusterize distance (centroidOf featuresCount)            
             seq {
                 for _ in 1..20 ->
                     clustering data k
             }
             |> Seq.minBy (fun(cs, f) -> RSS data (cs |> Seq.map snd))
         let clusters =
-            data
-            |> Array.map(fun v -> bestClassifier v)
+            observations
+            |> Array.map(fun (ind, v) -> findLabelById entities ind, bestClassifier v)
         clusters
         
 

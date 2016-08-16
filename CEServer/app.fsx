@@ -25,37 +25,35 @@ open Suave.Writers
 open System.Web
 
 let places, crimeTypes, crimes = prepareData
-let stats = calculateStatistics crimes
-    
-let clusters = getClusters stats
+let stats = calculateStatistics crimes    
+let similarPlaces = getClusters stats places
+let byPlace = crimesByPlace crimes places
+let byType = crimesByType crimes crimeTypes
+let tree = learn crimes places crimeTypes
+let prediction = predict tree places
 
+let app =
+    choose
+        [ 
+          GET >=> choose
+            [ 
+              path "/" >=> redirect "/index.html"
+              path "/index.html" >=> file "index.html"; browseHome
+              path "/app.js" >=> file "app.js"; browseHome
+              path "/app.css" >=> file "app.css"; browseHome
+              path "/lib.css" >=> file "lib.css"; browseHome
+              path "/lib.js" >=> file "lib.js"; browseHome
+              path "/template.js" >=> file "template.js"; browseHome
+              path "/world.json" >=> file "world.json"; browseHome
+              path "/api/places" >=> json places
+              path "/api/crimes/byplace" >=> json byPlace
+              path "/api/crimes/bytype" >=> json byType
+              path "/api/types" >=> json crimeTypes              
+              path "/api/similar" >=> json similarPlaces              
+              pathScan "/api/predict/%s" (fun (a:string) -> json (prediction a))              
+             ]          
+        ]
 
-//let byPlace = crimesByPlace crimes places
-//let byType = crimesByType crimes crimeTypes
-//let tree = learn crimes places crimeTypes
-//let prediction = predict tree places
-//
-//let app =
-//    choose
-//        [ 
-//          GET >=> choose
-//            [ 
-//              path "/" >=> redirect "/index.html"
-//              path "/index.html" >=> file "index.html"; browseHome
-//              path "/app.js" >=> file "app.js"; browseHome
-//              path "/app.css" >=> file "app.css"; browseHome
-//              path "/lib.css" >=> file "lib.css"; browseHome
-//              path "/lib.js" >=> file "lib.js"; browseHome
-//              path "/template.js" >=> file "template.js"; browseHome
-//              path "/world.json" >=> file "world.json"; browseHome
-//              path "/api/places" >=> json places
-//              path "/api/crimes/byplace" >=> json byPlace
-//              path "/api/crimes/bytype" >=> json byType
-//              path "/api/types" >=> json crimeTypes              
-//              pathScan "/api/predict/%s" (fun (a:string) -> json (prediction a))              
-//             ]          
-//        ]
-//
-//startWebServer { defaultConfig with homeFolder = Some @"C:\Repository\Learning\TinyML\CEClient\build" } app
+startWebServer { defaultConfig with homeFolder = Some @"C:\Repository\Learning\TinyML\CEClient\build" } app
 
 

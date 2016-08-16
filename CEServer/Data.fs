@@ -136,9 +136,9 @@ module Data =
             |> Seq.map (fun (_,v) -> getPercentage v overall)  
         crimes
         |> Seq.groupBy extractPlace
-        |> Seq.map(fun (l, vs) -> Seq.countBy extractType vs)
-        |> Seq.map(fun pairs -> getStats pairs)
-        |> Seq.map(fun values -> Seq.toArray values)
+        |> Seq.map(fun (l, vs) -> (l, Seq.countBy extractType vs))
+        |> Seq.map(fun (l, pairs) -> (l, getStats pairs))
+        |> Seq.map(fun (l, values) -> (l, Seq.toArray values))
         |> Seq.toArray
 
     
