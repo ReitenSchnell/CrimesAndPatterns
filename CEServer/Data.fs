@@ -7,17 +7,27 @@ module Data =
     open Accord.MachineLearning.DecisionTrees
     open Accord.Statistics.Distributions.DensityKernels
     open Accord.MachineLearning
+    open Newtonsoft.Json
+    open Newtonsoft.Json.Serialization  
 
     type CrimeReport = CsvProvider<"sample.csv", AssumeMissingValues  = true>
     type CrimeReportRow = CrimeReport.Row
-    type Crime = {Place : int; Type : int; Outcome : int}
+    type Crime = {
+        [<JsonProperty(PropertyName = "P")>]
+        Place : int; 
+        [<JsonProperty(PropertyName = "T")>]
+        Type : int; 
+        [<JsonProperty(PropertyName = "O")>]
+        Outcome : int}
     type Statistics = {Label : string; Value : float; Fraction : string}
-    type Entity = {Label: string; Id : int}    
+    type Entity = {Label: string; Id : int}
+    type Dump = {Crimes : Crime list; Places : Entity list; Types : Entity list}    
 
-    let pathToData = __SOURCE_DIRECTORY__ + @"..\..\Data\CrimeEngland1\"
+    let pathToData = __SOURCE_DIRECTORY__ + @"..\..\Data\Data\"
     
     let extractPlace(cr:Crime) = cr.Place
     let extractType(cr:Crime) = cr.Type
+    let filename = __SOURCE_DIRECTORY__ + "\dump.json"
 
     let mapOutcome value =
             match value with
@@ -52,8 +62,7 @@ module Data =
 
         let places = getPossibleValues extractPlaceRow rawData
         let types = getPossibleValues extractTypeRow rawData
-        let findIndex (labels : Entity list) value = List.findIndex (fun a -> a.Label = value) labels
-        
+        let findIndex (labels : Entity list) value = List.findIndex (fun a -> a.Label = value) labels       
         
         let mapToCrime(row : CrimeReportRow) =
             {Outcome = extractOutcomeRow row |> mapOutcome; Place = extractPlaceRow row |> findIndex places; Type = extractTypeRow row |> findIndex types}
@@ -62,8 +71,17 @@ module Data =
             rawData
             |> Seq.map(fun rows -> mapToCrime rows)
             |> Seq.toList
+        
+        let dump = {Crimes = crimes; Places = places; Types = types}
+        let serialized = JsonConvert.SerializeObject(dump)
+        File.WriteAllText(filename, serialized)                        
 
         (places, types, crimes)
+
+    let openData =
+        let serialized = File.ReadAllText filename
+        let dump = JsonConvert.DeserializeObject<Dump>(serialized)
+        (dump.Places, dump.Types, dump.Crimes)
 
     let findLabelById labels value = (Seq.find(fun v -> v.Id = value) labels).Label 
 
