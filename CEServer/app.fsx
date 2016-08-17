@@ -25,8 +25,10 @@ open Suave.Writers
 open System.Web
 
 let places, crimeTypes, crimes = prepareData
-let stats = calculateStatistics crimes    
+let stats = calculateStatistics crimes
+let foundStats = calculateSuspectFoundStatistics crimes    
 let similarPlaces = getClusters stats places
+let similarPlacesWithSuspect = getClusters foundStats places
 let byPlace = crimesByPlace crimes places
 let byType = crimesByType crimes crimeTypes
 let tree = learn crimes places crimeTypes
@@ -49,7 +51,8 @@ let app =
               path "/api/crimes/byplace" >=> json byPlace
               path "/api/crimes/bytype" >=> json byType
               path "/api/types" >=> json crimeTypes              
-              path "/api/similar" >=> json similarPlaces              
+              path "/api/similar/general" >=> json similarPlaces              
+              path "/api/similar/found" >=> json similarPlacesWithSuspect              
               pathScan "/api/predict/%s" (fun (a:string) -> json (prediction a))              
              ]          
         ]

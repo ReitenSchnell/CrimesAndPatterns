@@ -23,6 +23,16 @@ angular.module('crimeChartApp').factory('dataService', function($http, $q){
         predictSuspect : function(id){
           var data = $http.get(apiUrl + 'predict/' + id);
           return $q.when(data);
+        },
+
+        getSimilarities : function(){
+          var data = $http.get(apiUrl + 'similar/general');
+          return $q.when(data);
+        },
+
+        getSimilaritiesFound : function(){
+          var data = $http.get(apiUrl + 'similar/found');
+          return $q.when(data);
         }
     }
 });

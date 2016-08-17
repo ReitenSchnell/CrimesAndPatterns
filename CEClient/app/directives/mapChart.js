@@ -4,14 +4,15 @@ angular
     return{
       restrict: 'EA',
       template: "<svg></svg>",
-      scope: { regions: '=' , boundaries : '=', forces : '=', predictions : '='},
+      scope: { regions: '=' , boundaries : '=', forces : '=', predictions : '=', similarities : '='},
 
       link: function(scope, elem, attrs){
         var d3 = $window.d3;
         var rawSvg = elem.find("svg");
         var svg = d3.select(rawSvg[0]);
+        var colorScale = d3.scale.category20().domain(d3.range(0,40));
 
-        var regionsData, boundariesData, width, forces, predictions;
+        var regionsData, boundariesData, width, forces, predictions, similarities;
 
         scope.$watch('regions', function(geo){
           if(!geo) return;
@@ -34,6 +35,12 @@ angular
         scope.$watch('predictions', function(data){
           if(!data) return;
           predictions = data;
+          drawChart();
+        });
+
+        scope.$watch('similarities', function(data){
+          if(!data) return;
+          similarities = data;
           drawChart();
         });
 
@@ -86,6 +93,28 @@ angular
 
             forcesBoundaries.enter().insert("path")
               .attr("class", function (d, i) { return predictions[i].item2 == 0 ? "force_notfound" : "force_found" })
+              .attr("d", path);
+
+            forcesBoundaries
+              .append("svg:title")
+              .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
+              .attr("dy", ".35em")
+              .text(function (d, i) { return mapLabels[i] });
+          }
+
+          if (similarities) {
+            var mapLabels = forces.map(function(item) {
+              return item.name;
+            });
+
+            var mapValues = forces.map(function(item) {
+              return item.value;
+            });
+
+            var forcesBoundaries = svg.selectAll(".force").data(mapValues);
+
+            forcesBoundaries.enter().insert("path")
+              .style('fill',function(d,i){ return colorScale(similarities[i].item2+5); })
               .attr("d", path);
 
             forcesBoundaries

@@ -141,6 +141,13 @@ module Data =
         |> Seq.map(fun (l, values) -> (l, Seq.toArray values))
         |> Seq.toArray
 
+    let calculateSuspectFoundStatistics (crimes:Crime seq) =
+        let suspectFoundData = 
+            crimes
+            |> Seq.filter(fun cr -> cr.Outcome.Length > 0 && cr.Outcome <> "Under investigation" && cr.Outcome <> "Investigation complete; no suspect identified")
+        calculateStatistics suspectFoundData
+
+
     
         
 
