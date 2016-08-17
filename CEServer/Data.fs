@@ -10,7 +10,7 @@ module Data =
 
     type CrimeReport = CsvProvider<"sample.csv", AssumeMissingValues  = true>
     type CrimeReportRow = CrimeReport.Row
-    type Crime = {Place : int; Type : int; Outcome : string}
+    type Crime = {Place : int; Type : int; Outcome : int}
     type Statistics = {Label : string; Value : float; Fraction : string}
     type Entity = {Label: string; Id : int}    
 
@@ -18,6 +18,14 @@ module Data =
     
     let extractPlace(cr:Crime) = cr.Place
     let extractType(cr:Crime) = cr.Type
+
+    let mapOutcome value =
+            match value with
+            | null -> 0
+            | "" -> 0
+            | "Under investigation" -> 0
+            | "Investigation complete; no suspect identified" -> 1
+            | _ -> 2
 
     let prepareData =
         let rawData =
@@ -30,7 +38,7 @@ module Data =
 
         let extractPlaceRow(row : CrimeReportRow) = row.``Reported by``.Replace(" Police", "")
         let extractTypeRow(row : CrimeReportRow) = row.``Crime type``
-        let extractOutcomeRow(row : CrimeReportRow) = row.``Last outcome category``
+        let extractOutcomeRow(row : CrimeReportRow) = row.``Last outcome category``        
 
         let getPossibleValues extractor (rows : CrimeReportRow list) =
             let lst =
@@ -46,8 +54,9 @@ module Data =
         let types = getPossibleValues extractTypeRow rawData
         let findIndex (labels : Entity list) value = List.findIndex (fun a -> a.Label = value) labels
         
+        
         let mapToCrime(row : CrimeReportRow) =
-            {Outcome = extractOutcomeRow row; Place = extractPlaceRow row |> findIndex places; Type = extractTypeRow row |> findIndex types}
+            {Outcome = extractOutcomeRow row |> mapOutcome; Place = extractPlaceRow row |> findIndex places; Type = extractTypeRow row |> findIndex types}
 
         let crimes = 
             rawData
@@ -74,8 +83,8 @@ module Data =
     let crimesByPlace (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractPlace labels
 
     let learn data places crimeTypes =
-        let suspectFoud(cr:Crime) = cr.Outcome <> "Investigation complete; no suspect identified"
-        let hasOutcome = data |> List.filter(fun (cr : Crime) -> cr.Outcome.Length > 0 && cr.Outcome <> "Under investigation")    
+        let suspectFoud(cr:Crime) = cr.Outcome <> 1
+        let hasOutcome = data |> List.filter(fun (cr : Crime) -> cr.Outcome <> 0)    
 
         let classCount = 2
         let attributes = [|new DecisionVariable("Place", places|>Seq.length); new DecisionVariable("Type", crimeTypes|>Seq.length)|];
@@ -144,15 +153,5 @@ module Data =
     let calculateSuspectFoundStatistics (crimes:Crime seq) =
         let suspectFoundData = 
             crimes
-            |> Seq.filter(fun cr -> cr.Outcome.Length > 0 && cr.Outcome <> "Under investigation" && cr.Outcome <> "Investigation complete; no suspect identified")
+            |> Seq.filter(fun cr -> cr.Outcome > 1)
         calculateStatistics suspectFoundData
-
-
-    
-        
-
-
-        
-        
-
-
