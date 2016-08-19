@@ -19,7 +19,7 @@ module Data =
         Type : int; 
         [<JsonProperty(PropertyName = "O")>]
         Outcome : int}
-    type Statistics = {Label : string; Value : float; Fraction : string}
+    type Statistics = {Label : string; Value : float; Fraction : string; Percentage : float}
     type Entity = {Label: string; Id : int}
     type Dump = {Crimes : Crime list; Places : Entity list; Types : Entity list}    
 
@@ -43,14 +43,13 @@ module Data =
             |> Seq.map Directory.EnumerateFiles
             |> Seq.concat
             |> Seq.map(fun filename -> (CrimeReport.Load filename).Rows)
-            |> Seq.concat
-            |> Seq.toList
+            |> Seq.concat            
 
         let extractPlaceRow(row : CrimeReportRow) = row.``Reported by``.Replace(" Police", "")
         let extractTypeRow(row : CrimeReportRow) = row.``Crime type``
         let extractOutcomeRow(row : CrimeReportRow) = row.``Last outcome category``        
 
-        let getPossibleValues extractor (rows : CrimeReportRow list) =
+        let getPossibleValues extractor (rows : CrimeReportRow seq) =
             let lst =
                 rows
                 |> Seq.map extractor
@@ -86,19 +85,19 @@ module Data =
     let findLabelById labels value = (Seq.find(fun v -> v.Id = value) labels).Label 
 
     let mapListToWrappers (labels:Entity seq) (pairs: (int * int) seq) =
-        let getPercentage value sum = System.Math.Round(100.0 * (float) value / sum, 2).ToString() + "%"
+        let getPercentage value sum = System.Math.Round(100.0 * (float) value / sum, 2)
         let overall = pairs |> Seq.sumBy(fun (_, v) -> v) |> (float)         
         pairs
-        |> Seq.map(fun(l,v) -> {Label = findLabelById labels l ; Value = (float) v; Fraction = getPercentage v overall})        
+        |> Seq.map(fun(l,v) -> {Label = findLabelById labels l ; Value = (float) v; Fraction = (getPercentage v overall).ToString() + "%"; Percentage = getPercentage v overall})        
 
     let crimesByCategory (crimes:Crime seq) extractor (labels:Entity seq) =
             crimes                
             |> Seq.countBy extractor
             |> Seq.toList
-            |> mapListToWrappers labels
+            |> mapListToWrappers labels            
 
     let crimesByType (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractType labels
-    let crimesByPlace (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractPlace labels
+    let crimesByPlace (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractPlace labels |> Seq.filter(fun e -> e.Percentage >= 2.0)
 
     let learn data places crimeTypes =
         let suspectFoud(cr:Crime) = cr.Outcome <> 1
@@ -161,12 +160,20 @@ module Data =
             let overall = pairs |> Seq.sumBy(fun (_, v) -> v) |> (float)
             pairs
             |> Seq.map (fun (_,v) -> getPercentage v overall)  
-        crimes
-        |> Seq.groupBy extractPlace
-        |> Seq.map(fun (l, vs) -> (l, Seq.countBy extractType vs))
-        |> Seq.map(fun (l, pairs) -> (l, getStats pairs))
-        |> Seq.map(fun (l, values) -> (l, Seq.toArray values))
-        |> Seq.toArray
+        let stats =
+            crimes
+            |> Seq.groupBy extractPlace
+            |> Seq.map(fun (l, vs) -> (l, Seq.countBy extractType vs))
+            |> Seq.map(fun (l, pairs) -> (l, getStats pairs))
+            |> Seq.map(fun (l, values) -> (l, Seq.toArray values))
+            |> Seq.toArray
+        let maxElement = stats |> Array.maxBy(fun(l,a) -> Array.length a)
+        let _, arr = maxElement
+        let maxCount = Array.length arr
+        stats
+        |> Array.filter(fun (_, a) -> Array.length a = maxCount)
+        
+
 
     let calculateSuspectFoundStatistics (crimes:Crime seq) =
         let suspectFoundData = 

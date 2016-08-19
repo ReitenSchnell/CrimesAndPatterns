@@ -81,13 +81,13 @@ module Clusters =
         ||> Seq.map2(fun u1 u2 -> pown(u1-u2) 2)
         |> Seq.sum
 
-    let getClusters (observations : (int*float[])[]) (entities : Entity list) =
-        let featuresCount = Array.length observations
+    let getClusters (observations : (int*float[])[]) (entities : Entity list) =        
+        let featuresCount = Array.length observations        
         let data = 
             observations
             |> Array.map(fun(_, arr) -> arr)
         let possibleKs = 
-            [2..featuresCount-2]
+            [2..featuresCount/4]
             |> Seq.map(fun k ->
                 let value = 
                     [for _ in 1..1 ->
@@ -101,10 +101,12 @@ module Clusters =
         let (k, err) = 
             possibleKs
             |> Seq.minBy(fun (k,err) -> err)
+        printfn "best K is %A" k
         let (bestClusters, bestClassifier) =
-            let clustering = clusterize distance (centroidOf featuresCount)            
+            let features = Array.length data.[0]
+            let clustering = clusterize distance (centroidOf features)            
             seq {
-                for _ in 1..20 ->
+                for _ in 1..10 ->
                     clustering data k
             }
             |> Seq.minBy (fun(cs, f) -> RSS data (cs |> Seq.map snd))

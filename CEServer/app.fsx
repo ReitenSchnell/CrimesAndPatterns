@@ -24,7 +24,7 @@ open Suave.Redirection
 open Suave.Writers
 open System.Web
 
-let places, crimeTypes, crimes = prepareData
+let places, crimeTypes, crimes = openData
 let stats = calculateStatistics crimes
 let foundStats = calculateSuspectFoundStatistics crimes    
 let similarPlaces = getClusters stats places
