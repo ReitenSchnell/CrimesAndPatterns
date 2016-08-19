@@ -154,12 +154,17 @@ module Data =
         |> Seq.map(fun place -> (place.Label, tree.Compute([|place.Id; System.Int32.Parse crimeType|])))
         |> Seq.toList
 
-    let calculateStatistics (crimes:Crime seq) =
+    let calculateStatistics (crimes:Crime seq) (types:Entity list) =
         let getStats (pairs: (int * int) seq) =
             let getPercentage value sum = 100.0 * System.Math.Round((float) value / sum, 2)
             let overall = pairs |> Seq.sumBy(fun (_, v) -> v) |> (float)
-            pairs
-            |> Seq.map (fun (_,v) -> getPercentage v overall)  
+            let calculated =
+                pairs
+                |> Seq.map (fun (l,v) -> l, getPercentage v overall)
+                |> dict
+            types
+            |> List.map(fun e -> if calculated.ContainsKey e.Id then (e.Id, calculated.[e.Id]) else (e.Id, 0.0))                        
+            
         let stats =
             crimes
             |> Seq.groupBy extractPlace
@@ -167,13 +172,7 @@ module Data =
             |> Seq.map(fun (l, pairs) -> (l, getStats pairs))
             |> Seq.map(fun (l, values) -> (l, Seq.toArray values))
             |> Seq.toArray
-        let maxElement = stats |> Array.maxBy(fun(l,a) -> Array.length a)
-        let _, arr = maxElement
-        let maxCount = Array.length arr
         stats
-        |> Array.filter(fun (_, a) -> Array.length a = maxCount)
-        
-
 
     let calculateSuspectFoundStatistics (crimes:Crime seq) =
         let suspectFoundData = 

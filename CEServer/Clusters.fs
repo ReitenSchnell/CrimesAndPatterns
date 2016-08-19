@@ -81,13 +81,14 @@ module Clusters =
         ||> Seq.map2(fun u1 u2 -> pown(u1-u2) 2)
         |> Seq.sum
 
-    let getClusters (observations : (int*float[])[]) (entities : Entity list) =        
+    let getClusters (observations : (int*(int*float)[])[]) (places : Entity list) =        
         let featuresCount = Array.length observations        
         let data = 
             observations
-            |> Array.map(fun(_, arr) -> arr)
+            |> Array.map(fun(_, arr) -> Array.map(fun (_,a) -> a) arr)
+        let ruleOfThumb = sqrt(float featuresCount/2.0) |> (int)
         let possibleKs = 
-            [2..featuresCount/4]
+            [ruleOfThumb-2 .. ruleOfThumb + 2]
             |> Seq.map(fun k ->
                 let value = 
                     [for _ in 1..1 ->
@@ -111,8 +112,8 @@ module Clusters =
             }
             |> Seq.minBy (fun(cs, f) -> RSS data (cs |> Seq.map snd))
         let clusters =
-            observations
-            |> Array.map(fun (ind, v) -> findLabelById entities ind, bestClassifier v)
+            observations            
+            |> Array.map(fun (ind, v) -> findLabelById places ind, v |> Array.map(fun (l,a) -> a) |> bestClassifier)
         clusters
         
 

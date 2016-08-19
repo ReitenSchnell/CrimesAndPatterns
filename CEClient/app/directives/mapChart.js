@@ -10,7 +10,7 @@ angular
         var d3 = $window.d3;
         var rawSvg = elem.find("svg");
         var svg = d3.select(rawSvg[0]);
-        var colorScale = d3.scale.category20().domain(d3.range(0,40));
+        var colorScale = d3.scale.category10().domain(d3.range(0,40));
 
         var regionsData, boundariesData, width, forces, predictions, similarities;
 

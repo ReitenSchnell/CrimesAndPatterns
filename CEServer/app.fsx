@@ -25,8 +25,8 @@ open Suave.Writers
 open System.Web
 
 let places, crimeTypes, crimes = openData
-let stats = calculateStatistics crimes
-let foundStats = calculateSuspectFoundStatistics crimes    
+let stats = calculateStatistics crimes crimeTypes
+let foundStats = calculateSuspectFoundStatistics crimes crimeTypes   
 let similarPlaces = getClusters stats places
 let similarPlacesWithSuspect = getClusters foundStats places
 let byPlace = crimesByPlace crimes places
