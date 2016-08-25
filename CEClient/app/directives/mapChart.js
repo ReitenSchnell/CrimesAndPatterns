@@ -80,16 +80,17 @@ angular
             .attr("class", "mesh")
             .attr("d", path);
 
+          var mapLabels = forces.map(function(item) {
+            return item.name;
+          });
+
+          var mapValues = forces.map(function(item) {
+            return item.value;
+          });
+
+          var forcesBoundaries = svg.selectAll(".force").data(mapValues);
+
           if (predictions){
-            var mapLabels = forces.map(function(item) {
-              return item.name;
-            });
-
-            var mapValues = forces.map(function(item) {
-              return item.value;
-            });
-
-            var forcesBoundaries = svg.selectAll(".force").data(mapValues);
 
             forcesBoundaries.enter().insert("path")
               .attr("class", function (d, i) { return predictions[i].item2 == 0 ? "force_notfound" : "force_found" })
@@ -99,29 +100,21 @@ angular
               .append("svg:title")
               .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
               .attr("dy", ".35em")
-              .text(function (d, i) { return mapLabels[i] });
+              .text(function (d, i) { return predictions[i].item1 });
           }
 
           if (similarities) {
-            var mapLabels = forces.map(function(item) {
-              return item.name;
-            });
-
-            var mapValues = forces.map(function(item) {
-              return item.value;
-            });
-
-            var forcesBoundaries = svg.selectAll(".force").data(mapValues);
 
             forcesBoundaries.enter().insert("path")
-              .style('fill',function(d,i){ return colorScale(similarities[i].item2+5); })
+              .style('fill',function(d,i){ return colorScale(similarities[i].cluster + 2); })
               .attr("d", path);
 
             forcesBoundaries
               .append("svg:title")
               .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
               .attr("dy", ".35em")
-              .text(function (d, i) { return mapLabels[i] });
+              .text(function (d, i) {
+                return similarities[i].place + similarities[i].stats });
           }
         }
       }

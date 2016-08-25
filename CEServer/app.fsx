@@ -27,8 +27,8 @@ open System.Web
 let places, crimeTypes, crimes = openData
 let stats = calculateStatistics crimes crimeTypes
 let foundStats = calculateSuspectFoundStatistics crimes crimeTypes   
-let similarPlaces = getClusters stats places
-let similarPlacesWithSuspect = getClusters foundStats places
+let similarPlaces = getClusters stats places crimeTypes
+let similarPlacesWithSuspect = getClusters foundStats places crimeTypes
 let byPlace = crimesByPlace crimes places
 let byType = crimesByType crimes crimeTypes
 let tree = learn crimes places crimeTypes

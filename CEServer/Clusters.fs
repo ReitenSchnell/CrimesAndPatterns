@@ -2,6 +2,8 @@
 open CEServer.Data
 
 module Clusters =
+    type Stat = {Type : string; Percent : string}
+    type Similars = {Place : string; Cluster : int; Stats : Stat[]}
     
     let pickFrom size k =
         let rng = System.Random()
@@ -81,7 +83,7 @@ module Clusters =
         ||> Seq.map2(fun u1 u2 -> pown(u1-u2) 2)
         |> Seq.sum
 
-    let getClusters (observations : (int*(int*float)[])[]) (places : Entity list) =        
+    let getClusters (observations : (int*(int*float)[])[]) (places : Entity list) (types:Entity list) =        
         let featuresCount = Array.length observations        
         let data = 
             observations
@@ -111,9 +113,17 @@ module Clusters =
                     clustering data k
             }
             |> Seq.minBy (fun(cs, f) -> RSS data (cs |> Seq.map snd))
+        let getTop (stats : (int*float)[]) =
+            stats
+            |> Array.sortBy(fun (l,v) -> -1.0*v)
+            |> Seq.take 3
+            |> Seq.map(fun(l,v) -> findLabelById types l, v)
+            |> Seq.map(fun(t,p) -> {Type = t; Percent = System.Math.Round(p,0).ToString() + "%"})
+            |> Seq.toArray
         let clusters =
             observations            
-            |> Array.map(fun (ind, v) -> findLabelById places ind, v |> Array.map(fun (l,a) -> a) |> bestClassifier)
+            |> Array.map(fun (ind, v) -> findLabelById places ind, v |> Array.map(fun (l,a) -> a) |> bestClassifier, v)
+            |> Array.map(fun (place, cluster, stats) -> {Place = place; Cluster = cluster; Stats = getTop stats})            
         clusters
         
 
