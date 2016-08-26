@@ -65,6 +65,14 @@ angular
           var path = d3.geo.path()
             .projection(projection);
 
+          var getDescription = function(item){
+            var header = '<h5 class="text-center">' + item.place + '</h5>';
+            var stats = item.stats.map(function(stat){
+              return '<p>' + stat.type + ': ' + stat.percent +'</p>'
+            }).join('');
+            return header + stats;
+          };
+
           svg
             .attr("width", width)
             .attr("height", height);
@@ -89,32 +97,58 @@ angular
           });
 
           var forcesBoundaries = svg.selectAll(".force").data(mapValues);
+          var tooltip = d3.select('body').append('div')
+            .attr('class', 'hidden tooltip');
 
           if (predictions){
 
             forcesBoundaries.enter().insert("path")
               .attr("class", function (d, i) { return predictions[i].item2 == 0 ? "force_notfound" : "force_found" })
-              .attr("d", path);
-
-            forcesBoundaries
-              .append("svg:title")
-              .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
-              .attr("dy", ".35em")
-              .text(function (d, i) { return predictions[i].item1 });
+              .attr("d", path).on('mousemove', function(d,i) {
+                var mouse = d3.mouse(svg.node()).map(function(d) {
+                  return parseInt(d);
+                });
+                tooltip.classed('hidden', false)
+                  .attr('style', 'left:' + (mouse[0]) +'px; top:' + (mouse[1]) + 'px')
+                  .html(predictions[i].item1);
+              })
+              .on("mouseover", function(e){
+                $(this)
+                  .attr("fill-opacity", ".5")
+                  .css({"stroke": d3.rgb(d3.select(this).style("fill")).darker(0.5), "stroke-width": "1px"});
+              })
+              .on("mouseout",function(e){
+                $(this)
+                  .attr("fill-opacity", "1")
+                  .css({"stroke-width": "0px"});
+                tooltip.classed('hidden', true);
+              });
           }
 
           if (similarities) {
 
             forcesBoundaries.enter().insert("path")
               .style('fill',function(d,i){ return colorScale(similarities[i].cluster + 2); })
-              .attr("d", path);
-
-            forcesBoundaries
-              .append("svg:title")
-              .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
-              .attr("dy", ".35em")
-              .text(function (d, i) {
-                return similarities[i].place + similarities[i].stats });
+              .attr("d", path)
+              .on('mousemove', function(d,i) {
+                var mouse = d3.mouse(svg.node()).map(function(d) {
+                  return parseInt(d);
+                });
+                tooltip.classed('hidden', false)
+                  .attr('style', 'left:' + (mouse[0]) +'px; top:' + (mouse[1]) + 'px;')
+                  .html(getDescription(similarities[i]));
+              })
+              .on("mouseover", function(e){
+                $(this)
+                  .attr("fill-opacity", ".5")
+                  .css({"stroke": d3.rgb(d3.select(this).style("fill")).darker(0.5), "stroke-width": "1px"});
+              })
+              .on("mouseout",function(e){
+                $(this)
+                  .attr("fill-opacity", "1")
+                  .css({"stroke-width": "0px"});
+                tooltip.classed('hidden', true);
+              });
           }
         }
       }
