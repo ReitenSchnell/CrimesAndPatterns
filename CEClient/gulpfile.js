@@ -70,7 +70,9 @@ gulp.task('libJS', function() {
     './bower_components/moment/min/moment.min.js',
     './bower_components/d3/d3.min.js',
     './bower_components/topojson/topojson.min.js',
-    './bower_components/underscore/underscore-min.js'
+    './bower_components/underscore/underscore-min.js',
+    './bower_components/angular-bootstrap/ui-bootstrap.min.js',
+    './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
   ])
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('./build'));
@@ -98,7 +100,12 @@ gulp.task('assets', function() {
     .pipe(gulp.dest('./build'));
 });
 
-gulp.task('rev', ['index', 'appJS', 'templates', 'appCSS',  'libJS', 'libCSS', 'assets'],  function(){
+gulp.task('fonts', function() {
+  return gulp.src(['./bower_components/bootstrap/fonts/*.*'])
+    .pipe(gulp.dest('./build/fonts'));
+});
+
+gulp.task('rev', ['index', 'appJS', 'templates', 'appCSS',  'libJS', 'libCSS', 'assets', 'fonts'],  function(){
   return  gulp.src('./build/index.html')
     .pipe(rev())
     .pipe(gulp.dest('./build'))
