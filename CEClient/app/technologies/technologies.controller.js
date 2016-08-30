@@ -1,5 +1,5 @@
 angular
   .module('crimeChartApp')
-  .controller('TechnologiesController', function () {
-
+  .controller('TechnologiesController', function ($rootScope) {
+    $rootScope.$broadcast("currentTabChanged", "Technologies");
   });

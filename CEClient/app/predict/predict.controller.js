@@ -1,6 +1,8 @@
 angular
   .module('crimeChartApp')
-  .controller('PredictController', function ($scope, dataService, $timeout) {
+  .controller('PredictController', function ($scope, dataService, $timeout, $rootScope) {
+    $rootScope.$broadcast("currentTabChanged", "Predictions");
+
     d3.json('uk.json', function(err, uk){
       if(err) throw err;
       $scope.$apply(function(){

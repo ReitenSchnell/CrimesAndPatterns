@@ -1,6 +1,7 @@
 angular
   .module('crimeChartApp')
-  .controller('StatisticsController', function ($scope, dataService, $timeout) {
+  .controller('StatisticsController', function ($scope, dataService, $timeout, $rootScope) {
+    $rootScope.$broadcast("currentTabChanged", "Statistics");
 
     dataService.getCrimesByPlace().then(function(data){
       $timeout(function() {

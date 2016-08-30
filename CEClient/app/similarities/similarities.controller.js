@@ -1,6 +1,8 @@
 angular
   .module('crimeChartApp')
-  .controller('SimilaritiesController', function ($scope, dataService, $timeout) {
+  .controller('SimilaritiesController', function ($scope, dataService, $timeout, $rootScope) {
+    $rootScope.$broadcast("currentTabChanged", "Similarities");
+
     d3.json('uk.json', function(err, uk){
       if(err) throw err;
       $scope.$apply(function(){
