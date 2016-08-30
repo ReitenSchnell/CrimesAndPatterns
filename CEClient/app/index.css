@@ -22,14 +22,22 @@ html {
 }
 
 .force_found {
-  fill: green;
+  fill: #2ca02c;
+  color: #2ca02c;
   stroke: #fff;
   stroke-width: .5px;
   stroke-linejoin: round;
 }
 
 .force_notfound {
-  fill: red;
+  fill: #d62728;
+  color: #d62728;
+  stroke: #fff;
+  stroke-width: .5px;
+  stroke-linejoin: round;
+}
+
+.similarity {
   stroke: #fff;
   stroke-width: .5px;
   stroke-linejoin: round;

@@ -5,7 +5,6 @@ angular
       if(err) throw err;
       $scope.$apply(function(){
          $scope.regions = topojson.feature(uk, uk.objects['uk-postcode-area']).features;
-         $scope.boundaries = topojson.mesh(uk, uk.objects['uk-postcode-area'], function(a, b) { return a !== b; });
       });
     });
 
@@ -35,7 +34,6 @@ angular
     $scope.predict = function(){
       dataService.predictSuspect($scope.selectedType.id).then(function(data){
         $scope.predictions = data.data;
-        console.log($scope.predictions);
       })
     }
   });
