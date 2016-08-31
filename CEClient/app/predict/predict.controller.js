@@ -1,7 +1,10 @@
 angular
   .module('crimeChartApp')
-  .controller('PredictController', function ($scope, dataService, $timeout, $rootScope) {
+  .controller('PredictController', function ($scope, dataService, $timeout, $rootScope, ngProgressFactory) {
     $rootScope.$broadcast("currentTabChanged", "Predictions");
+    $scope.progressbar = ngProgressFactory.createInstance();
+    $scope.progressbar.setColor('#31a354');
+    $scope.progressbar.start();
 
     d3.json('uk.json', function(err, uk){
       if(err) throw err;
@@ -26,6 +29,7 @@ angular
     dataService.getTypes().then(function(data){
       $timeout(function() {
         $scope.types = data.data;
+        $scope.progressbar.complete();
       }, 0)
     }, function(reason){
       console.log('error', reason);

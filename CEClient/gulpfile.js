@@ -73,6 +73,7 @@ gulp.task('libJS', function() {
     './bower_components/underscore/underscore-min.js',
     './bower_components/angular-bootstrap/ui-bootstrap.min.js',
     './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+    './bower_components/ngprogress/build/ngprogress.min.js'
   ])
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('./build'));

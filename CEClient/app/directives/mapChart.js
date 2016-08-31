@@ -1,6 +1,6 @@
 angular
   .module('crimeChartApp')
-  .directive('mapChart', function ($window, $parse, $timeout) {
+  .directive('mapChart', function ($window, $parse, $timeout, ngProgressFactory) {
     return{
       restrict: 'EA',
       template: "<svg></svg>",
@@ -11,6 +11,9 @@ angular
         var rawSvg = elem.find("svg");
         var svg = d3.select(rawSvg[0]);
         var colorScale = ["#3182bd", "#31a354", "#756bb1", "#d62728", "#fd8d3c", "#969696"];
+        scope.progressbar = ngProgressFactory.createInstance();
+        scope.progressbar.setColor('#31a354');
+        scope.progressbar.start();
 
         var regionsData, width, forces, predictions, similarities;
 
@@ -141,6 +144,7 @@ angular
                 tooltip.classed('hidden', true);
               });
           }
+          scope.progressbar.complete();
         }
       }
     }

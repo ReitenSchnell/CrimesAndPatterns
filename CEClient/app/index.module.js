@@ -1,2 +1,2 @@
 angular
-  .module('crimeChartApp', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngResource', 'ngRoute', 'ngMaterial', 'templates', 'ui.bootstrap']);
+  .module('crimeChartApp', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngResource', 'ngRoute', 'ngMaterial', 'templates', 'ui.bootstrap', 'ngProgress']);
