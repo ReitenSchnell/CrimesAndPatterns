@@ -45,7 +45,7 @@ module Data =
             |> Seq.map(fun filename -> (CrimeReport.Load filename).Rows)
             |> Seq.concat            
 
-        let extractPlaceRow(row : CrimeReportRow) = row.``Reported by``.Replace(" Police", "")
+        let extractPlaceRow(row : CrimeReportRow) = row.``Reported by``.Replace(" Police", "").Replace(" Constabulary", "")
         let extractTypeRow(row : CrimeReportRow) = row.``Crime type``
         let extractOutcomeRow(row : CrimeReportRow) = row.``Last outcome category``        
 
