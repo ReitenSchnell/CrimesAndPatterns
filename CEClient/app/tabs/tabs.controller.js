@@ -5,7 +5,7 @@ angular
       { link : '#/statistics', label : 'Statistics' },
       { link : '#/predict', label : 'Predictions' },
       { link : '#/similarities', label : 'Similarities' },
-      { link : '#/technologies', label : 'Technologies' }
+      { link : '#/technologies', label : 'About' }
     ];
 
     $rootScope.$on('currentTabChanged', function(event, tabname){
