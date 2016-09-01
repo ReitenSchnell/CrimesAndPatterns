@@ -1,10 +1,10 @@
 angular
   .module('crimeChartApp')
-  .directive('mapChart', function ($window, $parse, $timeout, ngProgressFactory) {
+  .directive('predictionsMap', function ($window, $parse, $timeout, ngProgressFactory) {
     return{
       restrict: 'EA',
       template: "<svg></svg>",
-      scope: { regions: '=' , forces : '=', similarities : '='},
+      scope: { regions: '=' , forces : '=', predictions : '='},
 
       link: function(scope, elem, attrs){
         var d3 = $window.d3;
@@ -15,7 +15,7 @@ angular
         scope.progressbar.setColor('#31a354');
         scope.progressbar.start();
 
-        var regionsData, width, forces, similarities;
+        var regionsData, width, forces, predictions;
 
         scope.$watch('regions', function(geo){
           if(!geo) return;
@@ -29,10 +29,9 @@ angular
           drawChart();
         });
 
-
-        scope.$watch('similarities', function(data){
+        scope.$watch('predictions', function(data){
           if(!data) return;
-          similarities = data;
+          predictions = data;
           drawChart();
         });
 
@@ -57,14 +56,6 @@ angular
           var path = d3.geo.path()
             .projection(projection);
 
-          var getDescription = function(item){
-            var header = '<h5 class="text-center">' + item.place + '</h5>';
-            var stats = item.stats.map(function(stat){
-              return stat.type + ': ' + stat.percent +'<br>'
-            }).join('');
-            return header + stats;
-          };
-
           svg
             .attr("width", width)
             .attr("height", height);
@@ -83,28 +74,26 @@ angular
           var tooltip = d3.select('body').append('div')
             .attr('class', 'hidden tooltip');
 
-          if (similarities) {
-            var mapColors = function(i) {
-              var entity = _.findWhere(similarities, {place: forces[i].name});
-              return colorScale[entity.cluster - 1];
+          if (predictions){
+            var mapLabels = function(i) {
+              var prediction = _.findWhere(predictions, {item1: forces[i].name});
+              return prediction.item1;
             };
 
-            var mapLabels = function(i) {
-              var entity = _.findWhere(similarities, {place: forces[i].name});
-              return getDescription(entity);
+            var mapClass = function(i) {
+              var prediction = _.findWhere(predictions, {item1: forces[i].name});
+              return prediction.item2 == 0 ? "force_notfound" : "force_found";
             };
 
             forcesBoundaries.enter().insert("path")
-              .style('fill',function(d,i){ return mapColors(i); })
-              .attr("class", "similarity")
-              .attr("d", path)
-              .on('mousemove', function(d,i) {
+              .attr("class", function (d, i) { return mapClass(i) })
+              .attr("d", path).on('mousemove', function(d,i) {
                 var mouse = d3.mouse(svg.node()).map(function(d) {
                   return parseInt(d);
                 });
                 var boundingClientRect = svg.node().getBoundingClientRect();
                 tooltip.classed('hidden', false)
-                  .attr('style', 'left:' + (boundingClientRect.left + mouse[0] - 100) +'px; top:' + (mouse[1]) + 'px;')
+                  .attr('style', 'left:' + (boundingClientRect.left + mouse[0] - 85) +'px; top:' + (mouse[1]) + 'px')
                   .html(mapLabels(i));
               })
               .on("mouseover", function(e){

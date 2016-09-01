@@ -116,7 +116,7 @@ module Clusters =
         let getTop (stats : (int*float)[]) =
             stats
             |> Array.sortBy(fun (l,v) -> -1.0*v)
-            |> Seq.take 3
+            |> Seq.take 5
             |> Seq.map(fun(l,v) -> findLabelById types l, v)
             |> Seq.map(fun(t,p) -> {Type = t; Percent = System.Math.Round(p,0).ToString() + "%"})
             |> Seq.toArray

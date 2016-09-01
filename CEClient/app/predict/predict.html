@@ -4,7 +4,7 @@
     <select  ng-model="selectedType" ng-options="c.label for c in types" ng-change = "predict()"></select>
   </div>
   <div class="col-md-4">
-    <div map-chart regions="regions" forces="forces" predictions="predictions"></div>
+    <div predictions-map regions="regions" forces="forces" predictions="predictions"></div>
   </div>
 </div>
 
