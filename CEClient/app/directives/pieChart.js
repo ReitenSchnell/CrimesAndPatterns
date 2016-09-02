@@ -35,6 +35,9 @@ angular
           var pie = d3.layout.pie().value(function(d){return d.value;});
           var arc = d3.svg.arc().outerRadius(r * 0.8).innerRadius(0);
 
+          var tooltip = d3.select('body').append('div')
+            .attr('class', 'hidden tooltip');
+
           var arcs = slices
             .selectAll("g.slice")
             .data(pie)
@@ -51,6 +54,15 @@ angular
             .attr("d", function (d) {
               return arc(d);
             })
+            .on('mousemove', function(d,i) {
+              var mouse = d3.mouse(svg.node()).map(function(d) {
+                return parseInt(d);
+              });
+              var boundingClientRect = svg.node().getBoundingClientRect();
+              tooltip.classed('hidden', false)
+                .attr('style', 'left:' + (boundingClientRect.left + mouse[0] - 100) +'px; top:' + (mouse[1] + 45) + 'px;')
+                .html(dataToPlot[i].label + ': '+ dataToPlot[i].fraction);
+            })
             .on("mouseover", function(e){
               $(this)
                 .attr("fill-opacity", ".5")
@@ -60,10 +72,9 @@ angular
               $(this)
                 .attr("fill-opacity", "1")
                 .css({"stroke-width": "0px"});
+              tooltip.classed('hidden', true);
             })
-            .attr("style","cursor:pointer;")
-            .append("svg:title")
-            .text(function(d, i) { return dataToPlot[i].label + ': '+ dataToPlot[i].fraction; });
+            .attr("style","cursor:pointer;");
 
           var key = function(d,i){ return dataToPlot[i].label; };
 

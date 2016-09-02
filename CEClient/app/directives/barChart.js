@@ -88,9 +88,9 @@ angular
             .attr('height', barHeight)
             .attr({'x':0,'y':function(d,i){ return yscale(i) + barHeight; }})
             .style('fill',function(d,i){ return colorScale(i); })
-            .attr('width',function(d){ return 0; })
-            .append("svg:title")
-            .text(function(d, i) { return dataToPlot[i].label + ': '+ dataToPlot[i].fraction; });
+            .attr('width',function(d){ return 0; });
+
+          var tooltip = d3.select('body').append('div').attr('class', 'hidden tooltip');
 
           var transit = d3.select("svg").selectAll("rect")
             .data(values)
@@ -99,15 +99,24 @@ angular
             .attr("width", function(d) {return xscale(d); });
 
             d3.selectAll('rect')
+            .on('mousemove', function(d,i) {
+                var mouse = d3.mouse(svg.node()).map(function(d) {
+                  return parseInt(d);
+                });
+                var boundingClientRect = svg.node().getBoundingClientRect();
+                tooltip.classed('hidden', false)
+                  .attr('style', 'left:' + (boundingClientRect.left + mouse[0]) +'px; top:' + (mouse[1] + 90) + 'px')
+                  .html(dataToPlot[i].label + ': '+ dataToPlot[i].fraction);})
             .on("mouseover", function(e){
-              $(this)
-                .attr("fill-opacity", ".5")
-                .css({"stroke": d3.rgb(d3.select(this).style("fill")).darker(1), "stroke-width": "1px"});
+                $(this)
+                  .attr("fill-opacity", ".5")
+                  .css({"stroke": d3.rgb(d3.select(this).style("fill")).darker(1), "stroke-width": "1px"});
             })
             .on("mouseout",function(e){
-              $(this)
-                .attr("fill-opacity", "1")
-                .css({"stroke-width": "0px"});
+                $(this)
+                  .attr("fill-opacity", "1")
+                  .css({"stroke-width": "0px"});
+                tooltip.classed('hidden', true);
             });
 
           svg.selectAll(".tick > text")
