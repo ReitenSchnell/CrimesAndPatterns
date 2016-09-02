@@ -50,12 +50,39 @@ html {
 .hidden {
   display: none;
 }
+
 div.tooltip {
+   color: #222;
+   background-color: #fff;
+   padding: .5em;
+   text-shadow: #f5f5f5 0 1px 0;
+   border-radius: 2px;
+   opacity: 0.9;
+   position: absolute;
+ }
+
+.tooltip-inner {
+  max-width: 200px;
+  padding: 3px 8px;
   color: #222;
+  text-align: center;
   background-color: #fff;
-  padding: .5em;
+  border-radius: 4px;
   text-shadow: #f5f5f5 0 1px 0;
-  border-radius: 2px;
   opacity: 0.9;
+}
+
+.tooltip.top .tooltip-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #fff;
+}
+.tooltip-arrow {
   position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
 }

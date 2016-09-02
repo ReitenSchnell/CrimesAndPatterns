@@ -97,7 +97,7 @@ module Data =
             |> mapListToWrappers labels            
 
     let crimesByType (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractType labels
-    let crimesByPlace (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractPlace labels |> Seq.filter(fun e -> e.Percentage >= 2.0)
+    let crimesByPlace (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractPlace labels |> Seq.filter(fun e -> e.Percentage >= 2.5)
 
     let learn data places crimeTypes =
         let suspectFoud(cr:Crime) = cr.Outcome <> 1
