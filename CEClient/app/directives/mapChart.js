@@ -45,7 +45,7 @@ angular
           if (!regionsData || !width || !forces)
             return;
 
-          var height = width * 1.5;
+          var height = width*1.0;
 
           var projection = d3.geo.albers()
             .center([0, 55.4])
