@@ -2,6 +2,10 @@ html {
   font-family: 'Roboto Slab', serif;
 }
 
+.glyphicon {
+  font-size: 14px;
+}
+
 .spacer {
   margin-top: 20px; /* define margin as you see fit */
 }
