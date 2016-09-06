@@ -83,10 +83,15 @@ div.tooltip {
   border-width: 5px 5px 0;
   border-top-color: #fff;
 }
+
 .tooltip-arrow {
   position: absolute;
   width: 0;
   height: 0;
   border-color: transparent;
   border-style: solid;
+}
+
+.chart_label {
+  font-size: 11px;
 }

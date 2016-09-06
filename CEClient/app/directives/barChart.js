@@ -120,7 +120,7 @@ angular
             });
 
           svg.selectAll(".tick > text")
-            .style("font-size","11px");
+            .attr("class", "chart_label");
         }
 
         scope.$watch('chartData', function(data){

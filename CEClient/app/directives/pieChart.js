@@ -84,7 +84,7 @@ angular
           text.enter()
             .append("text")
             .attr("dy", ".35em")
-            .style("font-size", "11px")
+            .attr("class", "chart_label")
             .text(function(d, i) {
               return dataToPlot[i].label;
             });
