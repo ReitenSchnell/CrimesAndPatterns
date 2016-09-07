@@ -44,7 +44,7 @@ angular
           if (!regionsData || !width || !forces)
             return;
 
-          var height = width * 1.5;
+          var height = width * 1.2;
 
           var projection = d3.geo.albers()
             .center([0, 55.4])
@@ -93,7 +93,7 @@ angular
                 });
                 var boundingClientRect = svg.node().getBoundingClientRect();
                 tooltip.classed('hidden', false)
-                  .attr('style', 'left:' + (boundingClientRect.left + mouse[0] - 85) +'px; top:' + (mouse[1]) + 'px')
+                  .attr('style', 'left:' + (boundingClientRect.left + mouse[0] - 85) +'px; top:' + (mouse[1] + 50) + 'px')
                   .html(mapLabels(i));
               })
               .on("mouseover", function(e){

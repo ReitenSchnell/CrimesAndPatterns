@@ -34,7 +34,7 @@ angular
 
           var fullBarHeight = 30;
           var height = fullBarHeight*labelsLength;
-          var chartHeight = height * 0.9;
+          var chartHeight = height * 0.8;
           var barHeight = fullBarHeight*2/3;
 
           var canvas = svg

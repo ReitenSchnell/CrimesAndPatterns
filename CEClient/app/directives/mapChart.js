@@ -29,7 +29,6 @@ angular
           drawChart();
         });
 
-
         scope.$watch('similarities', function(data){
           if(!data) return;
           similarities = data;
@@ -45,7 +44,7 @@ angular
           if (!regionsData || !width || !forces)
             return;
 
-          var height = width*1.0;
+          var height = width*0.9;
 
           var projection = d3.geo.albers()
             .center([0, 55.4])
@@ -58,7 +57,7 @@ angular
             .projection(projection);
 
           var getDescription = function(item){
-            var header = '<h5 class="text-center">' + item.place + '</h5>';
+            var header = '<h4 class="text-center">' + item.place + '</h4>';
             var stats = item.stats.map(function(stat){
               return stat.type + ': ' + stat.percent +'<br>'
             }).join('');
