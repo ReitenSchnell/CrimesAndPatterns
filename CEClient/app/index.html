@@ -11,11 +11,16 @@
 <body ng-cloak>
 <div class="container">
   <div class="text-center">
-    <h2>Crimes & Patterns</h2>
+    <h3>Crimes & Patterns</h3>
+    <blockquote class="blockquote-reverse">
+      <p>...statistics are only a starting point. Each case is unique and has to be figured out on its own specific terms.</p>
+      <footer>John Douglas, Mark Olshaker in <cite title="Law & Disorder">Law & Disorder</cite></footer>
+    </blockquote>
   </div>
   <ul class="nav nav-pills" ng-controller="TabsController">
     <li ng-class="tabClass(tab)" ng-repeat="tab in tabs" tab="tab"><a href="{{tab.link}}" ng-click="setSelectedTab(tab)">{{tab.label}}</a></li>
   </ul>
+  <div class="row spacer"></div>
   <div ng-view></div>
 </div>
 
