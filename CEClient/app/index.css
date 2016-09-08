@@ -20,7 +20,7 @@ body {
 }
 
 .text_found {
-  color: #31a354;
+  color: rgb(34, 114, 58);
 }
 
 .text_notfound {
@@ -28,8 +28,8 @@ body {
 }
 
 .force_found {
-  fill: #31a354;
-  color: #31a354;
+  fill: rgb(34, 114, 58);
+  color: rgb(34, 114, 58);
   stroke: #fff;
   stroke-width: .5px;
   stroke-linejoin: round;
@@ -121,7 +121,7 @@ div.tooltip {
   padding-right: 15px;
   padding-left: 0;
   text-align: right;
-  border-right: 5px solid #31a354;
+  border-right: 5px solid rgb(34, 114, 58);
   border-left: 0;
 }
 
