@@ -104,7 +104,6 @@ module Clusters =
         let (k, err) = 
             possibleKs
             |> Seq.minBy(fun (k,err) -> err)
-        printfn "best K is %A" k
         let (bestClusters, bestClassifier) =
             let features = Array.length data.[0]
             let clustering = clusterize distance (centroidOf features)            

@@ -143,7 +143,6 @@ module Data =
             |> Seq.toArray
 
         let inputs =  training|>encodeOutputs
-        printfn "%A" inputs
         let run = learning.Run(training |> encodeInputs, training |> encodeOutputs)
         let validationAccuracy = 1.0 - learning.ComputeError(validation|>encodeInputs, validation|>encodeOutputs)
         let trainingAccuracy = 1.0 - learning.ComputeError(training|>encodeInputs, training|>encodeOutputs)
