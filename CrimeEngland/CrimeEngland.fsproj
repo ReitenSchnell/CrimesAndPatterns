@@ -63,6 +63,7 @@
     <None Include="app.config" />
     <None Include="sample.csv" />
     <Compile Include="Tree.fs" />
+    <None Include="Logs.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Accord">

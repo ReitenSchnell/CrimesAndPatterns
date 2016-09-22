@@ -15,6 +15,17 @@ open Suave.Writers
 open System.Web
 open System.Threading
 
+module IISHelpers =
+    open System
+
+    let httpPlatformPort =
+        match Environment.GetEnvironmentVariable("HTTP_PLATFORM_PORT") with
+        | null -> None
+        | value ->
+            match Int32.TryParse(value) with
+            | true, value -> Some value
+            | false, _ -> None
+
 module Program =
 
     [<EntryPoint>]
@@ -54,5 +65,10 @@ module Program =
                      ]          
                 ]
 
-        startWebServer { defaultConfig with homeFolder = Some __SOURCE_DIRECTORY__ } app
+        let port = 
+            match IISHelpers.httpPlatformPort with
+            | Some port -> port
+            | None -> 8083
+
+        startWebServer { defaultConfig with homeFolder = Some __SOURCE_DIRECTORY__; bindings = [ HttpBinding.mkSimple HTTP "127.0.0.1" port ] } app
         0

@@ -7,6 +7,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CrimeEngland", "CrimeEnglan
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CEServer", "CEServer\CEServer.fsproj", "{5F8474C9-028B-463D-905C-FACE83BDD546}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TestWeb", "TestWeb\TestWeb.fsproj", "{AFDEEA8F-28B1-4A62-B0C5-BAA3A6E41AD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5F8474C9-028B-463D-905C-FACE83BDD546}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F8474C9-028B-463D-905C-FACE83BDD546}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F8474C9-028B-463D-905C-FACE83BDD546}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFDEEA8F-28B1-4A62-B0C5-BAA3A6E41AD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFDEEA8F-28B1-4A62-B0C5-BAA3A6E41AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFDEEA8F-28B1-4A62-B0C5-BAA3A6E41AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFDEEA8F-28B1-4A62-B0C5-BAA3A6E41AD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
