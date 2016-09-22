@@ -14,6 +14,7 @@ open Suave.Redirection
 open Suave.Writers
 open System.Web
 open System.Threading
+open CEServer.Tree
 
 module IISHelpers =
     open System
@@ -40,6 +41,8 @@ module Program =
         let byType = crimesByType crimes crimeTypes
         let tree = learn crimes places crimeTypes
         let prediction = predict tree places
+        let mtree = manualTree crimes
+        let mprediction = manualpredict mtree places
 
         let app =
             choose
@@ -62,6 +65,7 @@ module Program =
                       path "/api/similar/general" >=> json similarPlaces              
                       path "/api/similar/found" >=> json similarPlacesWithSuspect              
                       pathScan "/api/predict/%s" (fun (a:string) -> json (prediction a))              
+                      pathScan "/api/mpredict/%s" (fun (a:string) -> json (mprediction a))              
                      ]          
                 ]
 

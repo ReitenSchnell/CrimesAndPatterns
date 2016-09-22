@@ -60,6 +60,7 @@
     <Compile Include="Web.fs" />
     <Compile Include="Data.fs" />
     <Compile Include="Clusters.fs" />
+    <Compile Include="Tree.fs" />
     <None Include="app.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
