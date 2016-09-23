@@ -3,10 +3,7 @@
 module Data =
     
     open FSharp.Data
-    open System.IO
-    open Accord.MachineLearning.DecisionTrees
-    open Accord.Statistics.Distributions.DensityKernels
-    open Accord.MachineLearning
+    open System.IO   
     open Newtonsoft.Json
     open Newtonsoft.Json.Serialization  
 
@@ -97,61 +94,7 @@ module Data =
             |> mapListToWrappers labels            
 
     let crimesByType (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractType labels
-    let crimesByPlace (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractPlace labels |> Seq.filter(fun e -> e.Percentage >= 2.5)
-
-    let learn data places crimeTypes =
-        let suspectFoud(cr:Crime) = cr.Outcome <> 1
-        let hasOutcome = data |> List.filter(fun (cr : Crime) -> cr.Outcome <> 0)    
-
-        let classCount = 2
-        let attributes = [|new DecisionVariable("Place", places|>Seq.length); new DecisionVariable("Type", crimeTypes|>Seq.length)|];
-        let tree = new DecisionTree(attributes, classCount)
-        let learning = new Learning.ID3Learning(tree)
-
-        let columnNames = [|"Place"; "Type"; "SuspectFound"|]       
-
-        let seed = 314159
-        let rng = System.Random(seed)
-
-        let shuffle(arr:'a[]) =
-            let arr = Array.copy arr
-            let l = arr.Length
-            for i in (l-1) .. -1 .. 1 do
-                let temp = arr.[i]
-                let j = rng.Next(0, i+1)
-                arr.[j] <- arr.[i]
-                arr.[i] <- temp
-            arr
-
-        let training, validation =
-            let shuffled = 
-                hasOutcome
-                |>Seq.toArray
-                |>shuffle
-            let size = 0.7*float(Array.length shuffled) |> int
-            shuffled.[..size], shuffled.[size+1..]
-
-        let encodeInputs(crimes:Crime seq) =
-            crimes
-            |> Seq.map(fun(cr:Crime) -> 
-                [|extractPlace cr; extractType cr|])
-            |> Seq.toArray
-
-        let encodeOutputs(crimes:Crime seq) =
-            crimes
-            |> Seq.map(fun(cr:Crime) -> suspectFoud cr |> System.Convert.ToInt32)
-            |> Seq.toArray
-
-        let inputs =  training|>encodeOutputs
-        let run = learning.Run(training |> encodeInputs, training |> encodeOutputs)
-        let validationAccuracy = 1.0 - learning.ComputeError(validation|>encodeInputs, validation|>encodeOutputs)
-        let trainingAccuracy = 1.0 - learning.ComputeError(training|>encodeInputs, training|>encodeOutputs)
-        tree
-
-    let predict (tree : DecisionTree) (places : Entity list) crimeType =
-        places
-        |> Seq.map(fun place -> (place.Label, tree.Compute([|place.Id; System.Int32.Parse crimeType|])))
-        |> Seq.toList
+    let crimesByPlace (crimes:Crime seq) (labels:Entity seq) = crimesByCategory crimes extractPlace labels |> Seq.filter(fun e -> e.Percentage >= 2.5)    
 
     let calculateStatistics (crimes:Crime seq) (types:Entity list) =
         let getStats (pairs: (int * int) seq) =

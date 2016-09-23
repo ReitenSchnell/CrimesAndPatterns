@@ -107,4 +107,5 @@ module Tree =
         let t = System.Int32.Parse crimeType
         places
         |> Seq.map(fun place -> (place.Label, decide tree {Place = place.Id; Type= t ; Outcome = 0}))
+        |> Seq.map(fun(lbl, pred) -> lbl, if pred = true then 1 else 0)
         |> Seq.toList

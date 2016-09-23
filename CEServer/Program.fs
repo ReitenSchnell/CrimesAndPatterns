@@ -39,8 +39,6 @@ module Program =
         let similarPlacesWithSuspect = getClusters foundStats places crimeTypes
         let byPlace = crimesByPlace crimes places
         let byType = crimesByType crimes crimeTypes
-        let tree = learn crimes places crimeTypes
-        let prediction = predict tree places
         let mtree = manualTree crimes
         let mprediction = manualpredict mtree places
 
@@ -64,8 +62,7 @@ module Program =
                       path "/api/types" >=> json crimeTypes              
                       path "/api/similar/general" >=> json similarPlaces              
                       path "/api/similar/found" >=> json similarPlacesWithSuspect              
-                      pathScan "/api/predict/%s" (fun (a:string) -> json (prediction a))              
-                      pathScan "/api/mpredict/%s" (fun (a:string) -> json (mprediction a))              
+                      pathScan "/api/predict/%s" (fun (a:string) -> json (mprediction a))              
                      ]          
                 ]
 
