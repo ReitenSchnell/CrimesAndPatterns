@@ -7,8 +7,9 @@ module Clusters =
     
     let pickFrom size k =
         let rng = System.Random()
+        printfn "start picking for %A and %A" k size
         let rec pick (set:int Set) =
-            let candidate = rng.Next(size)
+            let candidate = rng.Next(size)            
             let set = set.Add candidate
             if set.Count = k then set
             else pick set
@@ -26,17 +27,20 @@ module Clusters =
 
     let clusterize distance centroidOf observations k =
         let rec search (assignments, centroids) = 
+            printfn "Iteration start"
             let classifier observation =
                 centroids
                 |> Array.minBy(fun (_, centroid) -> distance observation centroid)
                 |> fst
 
+            printfn "New assignments"
             let assignments' =
                 assignments
                 |> Array.map(fun (_, observation) -> 
                     let closestCentroidId = classifier observation
                     (closestCentroidId, observation))
 
+            printfn "Changes"
             let changed = 
                 (assignments, assignments')
                 ||> Seq.zip
@@ -53,13 +57,15 @@ module Clusters =
                 search(assignments', centroids')
             else centroids, classifier
 
+        printfn "initialization"
         let initialValues = initialize observations k
+        printfn "initialized"
         search initialValues
 
     let squareError (obs1:double[])(obs2:double[]) =
         (obs1, obs2)
         ||> Seq.zip
-        |> Seq.sumBy(fun (x1,x2) -> pown (x1-x2) 2)
+        |> Seq.sumBy(fun (x1,x2) -> (x1-x2)*(x1-x2))
 
     let RSS (dataset:double[][]) centroids =
         dataset
@@ -80,7 +86,7 @@ module Clusters =
 
     let distance(obs1:double[])(obs2:double[]) =
         (obs1, obs2)
-        ||> Seq.map2(fun u1 u2 -> pown(u1-u2) 2)
+        ||> Seq.map2(fun u1 u2 -> (u1-u2)*(u1-u2))
         |> Seq.sum
 
     let getClusters (observations : (int*(int*float)[])[]) (places : Entity list) (types:Entity list) =        
@@ -89,13 +95,17 @@ module Clusters =
             observations
             |> Array.map(fun(_, arr) -> Array.map(fun (_,a) -> a) arr)
         let ruleOfThumb = sqrt(float featuresCount/2.0) |> (int)
+        printfn "Starting clusters %A %A" ruleOfThumb featuresCount
+        let minBound = if ruleOfThumb - 2 >= 2 then ruleOfThumb - 2 else ruleOfThumb
+        let maxBound = if ruleOfThumb + 2 <= featuresCount - 1 then ruleOfThumb + 2 else ruleOfThumb
         let possibleKs = 
-            [ruleOfThumb-2 .. ruleOfThumb + 2]
+            [minBound .. maxBound]
             |> Seq.map(fun k ->
                 let value = 
                     [for _ in 1..1 ->
                         let (clusters,classifier) =
                             let features = Array.length data.[0]
+                            printfn "Clustering first stage"
                             let clustering = clusterize distance (centroidOf features)
                             clustering data k                    
                         AIC data (clusters |> Seq.map snd) ]
@@ -109,6 +119,7 @@ module Clusters =
             let clustering = clusterize distance (centroidOf features)            
             seq {
                 for _ in 1..10 ->
+                    printfn "Clustering second stage"
                     clustering data k
             }
             |> Seq.minBy (fun(cs, f) -> RSS data (cs |> Seq.map snd))

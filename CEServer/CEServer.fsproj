@@ -90,6 +90,7 @@
     <None Include="Web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Main.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">

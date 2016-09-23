@@ -75,6 +75,7 @@ module Data =
         (places, types, crimes)
 
     let openData =
+        printfn "reading file"
         let serialized = File.ReadAllText filename
         let dump = JsonConvert.DeserializeObject<Dump>(serialized)
         (dump.Places, dump.Types, dump.Crimes)

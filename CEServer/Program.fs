@@ -32,15 +32,15 @@ module Program =
     [<EntryPoint>]
     let main argv = 
 
-        let places, crimeTypes, crimes = openData
-        let stats = calculateStatistics crimes crimeTypes
-        let foundStats = calculateSuspectFoundStatistics crimes crimeTypes   
-        let similarPlaces = getClusters stats places crimeTypes
-        let similarPlacesWithSuspect = getClusters foundStats places crimeTypes
-        let byPlace = crimesByPlace crimes places
-        let byType = crimesByType crimes crimeTypes
-        let mtree = manualTree crimes
-        let mprediction = manualpredict mtree places
+//        let places, crimeTypes, crimes = prepareData
+//        let stats = calculateStatistics crimes crimeTypes
+//        let foundStats = calculateSuspectFoundStatistics crimes crimeTypes   
+//        let similarPlaces = getClusters stats places crimeTypes
+//        let similarPlacesWithSuspect = getClusters foundStats places crimeTypes
+//        let byPlace = crimesByPlace crimes places
+//        let byType = crimesByType crimes crimeTypes
+//        let mtree = manualTree crimes
+//        let mprediction = manualpredict mtree places
 
         let app =
             choose
@@ -56,13 +56,13 @@ module Program =
                       path "/template.js" >=> file "template.js"; browseHome
                       path "/tregions.json" >=> file "tregions.json"; browseHome
                       path "/uk.json" >=> file "uk.json"; browseHome
-                      path "/api/places" >=> json places
-                      path "/api/crimes/byplace" >=> json byPlace
-                      path "/api/crimes/bytype" >=> json byType
-                      path "/api/types" >=> json crimeTypes              
-                      path "/api/similar/general" >=> json similarPlaces              
-                      path "/api/similar/found" >=> json similarPlacesWithSuspect              
-                      pathScan "/api/predict/%s" (fun (a:string) -> json (mprediction a))              
+//                      path "/api/places" >=> json places
+//                      path "/api/crimes/byplace" >=> json byPlace
+//                      path "/api/crimes/bytype" >=> json byType
+//                      path "/api/types" >=> json crimeTypes              
+//                      path "/api/similar/general" >=> json similarPlaces              
+//                      path "/api/similar/found" >=> json similarPlacesWithSuspect              
+//                      pathScan "/api/predict/%s" (fun (a:string) -> json (mprediction a))              
                      ]          
                 ]
 
