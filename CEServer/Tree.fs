@@ -103,9 +103,8 @@ module Tree =
             let nextLevelTree = branches.[usedValue]
             decide nextLevelTree observation
 
-    let manualpredict tree (places : Entity list) crimeType =
-        let t = System.Int32.Parse crimeType
+    let manualpredict tree (places : Entity list) crimeType =        
         places
-        |> Seq.map(fun place -> (place.Label, decide tree {Place = place.Id; Type= t ; Outcome = 0}))
+        |> Seq.map(fun place -> (place.Label, decide tree {Place = place.Id; Type= crimeType ; Outcome = 0}))
         |> Seq.map(fun(lbl, pred) -> lbl, if pred = true then 1 else 0)
         |> Seq.toList

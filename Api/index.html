@@ -1,0 +1,31 @@
+<!doctype html>
+<html ng-app="crimeChartApp">
+<head>
+  <meta charset="utf-8">
+  <title>Crimes & Patterns</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link href="lib.css" rel="stylesheet">
+  <link href="app.css?rev=710260995ec1ba944d7a1f1cc929a1f0" rel="stylesheet">
+</head>
+<body ng-cloak>
+<div class="container">
+  <div class="text-center">
+    <h2>Crimes & Patterns</h2>
+    <blockquote class="blockquote-reverse">
+      <p>...statistics are only a starting point. Each case is unique and has to be figured out on its own specific terms.</p>
+      <footer>John Douglas, Mark Olshaker in <cite title="Law & Disorder">Law & Disorder</cite></footer>
+    </blockquote>
+  </div>
+  <ul class="nav nav-pills" ng-controller="TabsController">
+    <li ng-class="tabClass(tab)" ng-repeat="tab in tabs" tab="tab"><a href="{{tab.link}}" ng-click="setSelectedTab(tab)">{{tab.label}}</a></li>
+  </ul>
+  <div class="row spacer"></div>
+  <div ng-view></div>
+</div>
+
+<script src="lib.js"></script>
+<script src="templates.js"></script>
+<script src="app.js?rev=95ab2bc978983d1daedf245873e459b6"></script>
+</body>
+</html>

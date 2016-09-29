@@ -76,13 +76,13 @@ angular
 
           if (predictions){
             var mapLabels = function(i) {
-              var prediction = _.findWhere(predictions, {item1: forces[i].name});
-              return prediction.item1;
+              var prediction = _.findWhere(predictions, {place: forces[i].name});
+              return prediction.place;
             };
 
             var mapClass = function(i) {
-              var prediction = _.findWhere(predictions, {item1: forces[i].name});
-              return prediction.item2 == 0 ? "force_notfound" : "force_found";
+              var prediction = _.findWhere(predictions, {place: forces[i].name});
+              return prediction.found == 0 ? "force_notfound" : "force_found";
             };
 
             forcesBoundaries.enter().insert("path")

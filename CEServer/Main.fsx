@@ -59,7 +59,7 @@ let app =
                       path "/api/types" >=> json crimeTypes              
                       path "/api/similar/general" >=> json similarPlaces              
                       path "/api/similar/found" >=> json similarPlacesWithSuspect              
-                      pathScan "/api/predict/%s" (fun (a:string) -> json (mprediction a))]         
+                      //pathScan "/api/predict/%s" (fun (a:string) -> json (mprediction a))]         
         ]
     
 

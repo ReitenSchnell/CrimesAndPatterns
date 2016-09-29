@@ -9,6 +9,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CEServer", "CEServer\CEServ
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TestWeb", "TestWeb\TestWeb.fsproj", "{AFDEEA8F-28B1-4A62-B0C5-BAA3A6E41AD8}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Api", "Api\Api.fsproj", "{629DD530-1E27-4944-A429-32951ABD4E53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{AFDEEA8F-28B1-4A62-B0C5-BAA3A6E41AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFDEEA8F-28B1-4A62-B0C5-BAA3A6E41AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFDEEA8F-28B1-4A62-B0C5-BAA3A6E41AD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{629DD530-1E27-4944-A429-32951ABD4E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{629DD530-1E27-4944-A429-32951ABD4E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{629DD530-1E27-4944-A429-32951ABD4E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{629DD530-1E27-4944-A429-32951ABD4E53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
