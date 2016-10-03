@@ -65,6 +65,7 @@ let main argv =
                       path "/fonts/glyphicons-halflings-regular.svg" >=> file "glyphicons-halflings-regular.svg"; browseHome
                       path "/fonts/glyphicons-halflings-regular.ttf" >=> file "glyphicons-halflings-regular.ttf"; browseHome
                       path "/fonts/glyphicons-halflings-regular.woff" >=> file "glyphicons-halflings-regular.woff"; browseHome
+                      path "/favicon.ico" >=> file "favicon.ico"; browseHome
                       path "/uk.json" >=> file "uk.json"; browseHome
                       path "/api/crimes/byplace" >=> Web.json dump.ByPlace
                       path "/api/crimes/bytype" >=> Web.json dump.ByType
