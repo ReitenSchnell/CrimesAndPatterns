@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('crimeChartApp').factory('dataService', function($http, $q){
-    //var apiUrl = "api/";
-    var apiUrl = "http://localhost:8083/api/";
+    var apiUrl = "api/";
+    //var apiUrl = "http://localhost:8083/api/";
     return {
 
         getCrimesByPlace : function(){
