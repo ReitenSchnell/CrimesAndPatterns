@@ -59,12 +59,8 @@ gulp.task('libJS', function() {
     './bower_components/angular-animate/angular-animate.min.js',
     './bower_components/angular-aria/angular-aria.min.js',
     './bower_components/angular-cookies/angular-cookies.min.js',
-    './bower_components/angular-material/angular-material.min.js',
-    './bower_components/angular-material-icons/angular-material-icons.min.js',
     './bower_components/angular-mocks/angular-mocks.js',
     './bower_components/angular-resource/angular-resource.min.js',
-    './bower_components/angular-facebook/lib/angular-facebook.js',
-    './bower_components/angular-facebook/lib/angular-facebook-phonegap.js',
 
     './bower_components/angular-touch/angular-touch.min.js',
     './bower_components/moment/min/moment.min.js',

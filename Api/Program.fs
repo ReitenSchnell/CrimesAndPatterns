@@ -41,7 +41,7 @@ module Web =
 [<EntryPoint>]
 let main argv =        
     let readData =
-        let preprocessedfile = __SOURCE_DIRECTORY__ + "\preprocessed.json"
+        let preprocessedfile = Directory.GetCurrentDirectory() + "\preprocessed.json"
         let serialized = File.ReadAllText preprocessedfile
         let dump = JsonConvert.DeserializeObject<DataTypes.Preprocessed>(serialized)
         dump
@@ -58,7 +58,7 @@ let main argv =
                       path "/app.css" >=> file "app.css"; browseHome
                       path "/lib.css" >=> file "lib.css"; browseHome
                       path "/lib.js" >=> file "lib.js"; browseHome
-                      path "/template.js" >=> file "template.js"; browseHome
+                      path "/templates.js" >=> file "templates.js"; browseHome
                       path "/tregions.json" >=> file "tregions.json"; browseHome
                       path "/fonts/glyphicons-halflings-regular.woff2" >=> file "glyphicons-halflings-regular.woff2"; browseHome
                       path "/fonts/glyphicons-halflings-regular.eot" >=> file "glyphicons-halflings-regular.eot"; browseHome

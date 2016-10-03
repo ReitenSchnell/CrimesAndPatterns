@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-md-3 shifted">
     <h4>Will suspect <span class="force_notfound">(not)</span> <span class="force_found">be</span> found?
-      <span class="glyphicon glyphicon-info-sign" uib-tooltip="Implementation is based on the Decision Tree algorithm. Crimes with nonempty (or not equal to 'Investigation complete; no suspect identified') value of 'Last outcome category' field are considered as crimes with found suspect" tooltip-placement="bottom"></span></h4>
+      <span class="glyphicon glyphicon-info-sign" uib-tooltip="Implementation is based on the Decision Tree machine learning algorithm. Crimes with nonempty (or not equal to 'Investigation complete; no suspect identified') value of 'Last outcome category' field are considered as crimes with found suspect" tooltip-placement="bottom"></span></h4>
     <select class="select-wrapper" ng-model="selectedType" ng-options="c.label for c in types" ng-change = "predict()"></select>
   </div>
   <div class="col-md-4">
