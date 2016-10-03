@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CEServer", "CEServer\CEServer.fsproj", "{5F8474C9-028B-463D-905C-FACE83BDD546}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DataPreprocess", "CEServer\DataPreprocess.fsproj", "{5F8474C9-028B-463D-905C-FACE83BDD546}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Api", "Api\Api.fsproj", "{629DD530-1E27-4944-A429-32951ABD4E53}"
 EndProject

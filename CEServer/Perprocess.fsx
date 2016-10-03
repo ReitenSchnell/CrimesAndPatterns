@@ -1,30 +1,16 @@
 ﻿#I @"..\packages\"
-#r @"Suave.1.1.3\lib\net40\Suave.dll"
 #r @"Newtonsoft.Json.8.0.3\lib\net40\Newtonsoft.Json.dll"
 #r @"FSharp.Data.2.3.0\lib\net40\FSharp.Data.dll"
-#load "Web.fs"
 #load "Data.fs"
 #load "Clusters.fs"
 #load "Tree.fs"
 
-open Suave
 open System.IO
-open Suave.Filters
-open Suave.Successful
-open Suave.Operators
 open System
-open Suave.Json
-open Suave.Files
-open CEServer.Web
 open CEServer.Data
 open CEServer.Clusters
-open Suave.Redirection
-open Suave.Writers
-open System.Web
-open System.Threading
 open CEServer.Tree
 open Newtonsoft.Json
-open Newtonsoft.Json.Serialization
 
 let places, crimeTypes, crimes = openData
 let stats = calculateStatistics crimes crimeTypes
