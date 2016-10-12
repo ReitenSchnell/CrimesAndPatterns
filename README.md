@@ -16,4 +16,4 @@ A SPA application, built with:
 * D3.js
 
 ## Api
-This is a REST API implementation based on lightweight web server Suave. It reads data from preprocessed JSON file and GET requests from client application. Also it is responsible for serving static files. This application is ready for deploy to IIS.
+This is a REST API implementation based on lightweight web server Suave. It reads data from preprocessed JSON file and serves GET requests from client application. Web.config was added to make this application be ready for deploy to IIS.
